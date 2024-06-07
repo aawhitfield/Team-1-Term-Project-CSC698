@@ -1,5 +1,6 @@
 import random # to be able to "spin" the wheel and get a random pocket
 
+# contains all the methods and attributes needed to simulate a roulette wheel and ball
 class Roulette:
     def __init__(self):
         # there are 38 pockets in a roulette wheel (0-36, 00, 0)
