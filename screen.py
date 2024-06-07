@@ -23,3 +23,24 @@ class Screen:
     # display the user's loss
     def displayLoss(self, loss):
         print("You have lost $" + str(loss) + ".")
+
+    # display welcome message
+    def displayWelcome(self):
+        print("Welcome to Roulette!")
+        print("You have $100 to start with.")
+        print("Good luck!")
+        print() # blank line
+
+    # display the user's options
+    def displayMenu(self):
+        print("1. Bet on a number")
+        print("2. Bet on a color")
+        print("3. Bet on odd or even")
+        print("4. Quit")
+        print() # blank line
+
+    # get the user's menu choice
+    def getMenuChoice(self):
+        choice = input("Enter your choice: ")
+        return choice
+

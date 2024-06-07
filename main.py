@@ -5,6 +5,30 @@ from screen import Screen
 roulette = Roulette()
 screen = Screen()
 
+# display welcome message
+screen.displayWelcome()
+
+# display the user's options
+screen.displayMenu()
+
+# get the user's menu choice
+choice = screen.getMenuChoice()
+
+# loop until the user chooses to quit
+while choice != "4":
+    # display the user's current balance
+    screen.displayBalance(100)
+    
+    # display the user's current bet
+    screen.displayBet(0)
+    print() # blank line
+    
+    # display the user's options
+    screen.displayMenu()
+    
+    # get the user's menu choice
+    choice = screen.getMenuChoice()
+
 # spin the wheel and get the ball pocket number
 pocket = roulette.spin()
 
