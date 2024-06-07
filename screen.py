@@ -19,10 +19,12 @@ class Screen:
     # display the user's winnings
     def displayWinnings(self, winnings):
         print("You have won $" + str(winnings) + ".")
+        print()
 
     # display the user's loss
     def displayLoss(self, loss):
         print("You have lost $" + str(loss) + ".")
+        print() # blank line
 
     # display welcome message
     def displayWelcome(self):
@@ -43,4 +45,21 @@ class Screen:
     def getMenuChoice(self):
         choice = input("Enter your choice: ")
         return choice
+    
+    # get the user's bet amount
+    def getBetAmount(self):
+        bet = input("Enter your bet amount: ")
+        return bet
 
+    # get the user's number bet
+    def getNumberBet(self):
+        number = input("Enter your number bet (0-36, 00): ")
+        return number
+    
+    # tell the user if they have won or lost
+    def displayOutcome(self, outcome):
+        if outcome == True:
+            print("Congratulations! You have won!")
+        else:
+            print("Sorry, you have lost.")
+        print() # blank line

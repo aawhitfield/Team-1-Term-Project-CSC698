@@ -19,19 +19,31 @@ while choice != "4":
     # display the user's current balance
     screen.displayBalance(100)
     
-    # display the user's current bet
-    screen.displayBet(0)
-    print() # blank line
+    # get the user's bet amount
+    bet = screen.getBetAmount()
+
+    if choice == "1":
+        # get the user's number bet
+        number = screen.getNumberBet()
+
+        # spin the wheel
+        ball = roulette.spin()
+
+        # display the ball pocket number to the user
+        screen.displayBall(ball)
+        print()
+
+        # determine if the user has won
+        if roulette.isWinnerByNumber(number):
+            # display the user's winnings
+            screen.displayWinnings(bet)
+        else:
+            # display the user's loss
+            screen.displayLoss(bet)
     
     # display the user's options
     screen.displayMenu()
     
     # get the user's menu choice
     choice = screen.getMenuChoice()
-
-# spin the wheel and get the ball pocket number
-pocket = roulette.spin()
-
-# display the ball pocket number to the user
-screen.displayBall(pocket)
 
