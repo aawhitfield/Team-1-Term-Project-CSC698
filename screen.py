@@ -48,7 +48,7 @@ class Screen:
     
     # get the user's bet amount
     def getBetAmount(self):
-        bet = input("Enter your bet amount: ")
+        bet = int(input("Enter your bet amount: "))
         return bet
 
     # get the user's number bet

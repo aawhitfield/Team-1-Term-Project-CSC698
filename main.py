@@ -5,6 +5,9 @@ from screen import Screen
 roulette = Roulette()
 screen = Screen()
 
+# create a variable to keep track of the user's money
+balance = 100
+
 # display welcome message
 screen.displayWelcome()
 
@@ -17,12 +20,12 @@ choice = screen.getMenuChoice()
 # loop until the user chooses to quit
 while choice != "4":
     # display the user's current balance
-    screen.displayBalance(100)
+    screen.displayBalance(balance)
     
     # get the user's bet amount
     bet = screen.getBetAmount()
 
-    if choice == "1":
+    if choice == "1": # bet on a number
         # get the user's number bet
         number = screen.getNumberBet()
 
@@ -35,11 +38,23 @@ while choice != "4":
 
         # determine if the user has won
         if roulette.isWinnerByNumber(number):
+            # calculate the user's winnings
+            winnings = roulette.calculateWinnings(bet)
+
+            # update the user's balance
+            balance += bet # get the bet back
+            balance += winnings
+
             # display the user's winnings
-            screen.displayWinnings(bet)
+            screen.displayWinnings(bet, winnings)
+            screen.displayBalance(balance)
         else:
             # display the user's loss
             screen.displayLoss(bet)
+            screen.displayBalance(balance)
+
+            # update the user's balance
+            balance -= bet
     
     # display the user's options
     screen.displayMenu()

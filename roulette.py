@@ -24,6 +24,11 @@ class Roulette:
             return True
         else:
             return False
+        
+    # calculate the amount of money the user has won
+    def calculateWinnings(self, bet):
+        return bet * 35
+    
     
 
     
