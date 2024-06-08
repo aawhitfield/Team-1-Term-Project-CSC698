@@ -1,3 +1,5 @@
+from color import Color # an enum class for color (red or black)
+
 # contains the methods to display information to the user via the command line "screen"
 
 class Screen:
@@ -5,25 +7,25 @@ class Screen:
         pass
 
     # display the ball pocket number to the user
-    def displayBall(self, ball):
-        print("The ball landed in pocket " + ball + ".")
+    def displayBall(self, ball, color):
+        print(f"The ball landed in pocket {ball} ({color.name.lower()}).")
 
     # display the user's current balance
     def displayBalance(self, balance):
-        print("Your current balance is $" + str(balance) + ".")
+        print(f"Your current balance is ${balance}.")
 
     # display the user's current bet
     def displayBet(self, bet):
-        print("You have bet $" + str(bet) + ".")
+        print(f"You have bet ${bet}.")
 
     # display the user's winnings
-    def displayWinnings(self, winnings):
-        print("You have won $" + str(winnings) + ".")
+    def displayWinnings(self, winnings, bet):
+        print(f"You have won ${winnings}. (Plus your bet of ${bet}.)")
         print()
 
     # display the user's loss
     def displayLoss(self, loss):
-        print("You have lost $" + str(loss) + ".")
+        print(f"You have lost ${loss}.")
         print() # blank line
 
     # display welcome message
@@ -48,17 +50,43 @@ class Screen:
     
     # get the user's bet amount
     def getBetAmount(self):
-        bet = int(input("Enter your bet amount: "))
-        return bet
+        while True: # loop in case the user continues to enter invalid input
+            try:
+                bet = int(input("Enter your bet amount: ")) # convert the input to an integer so we can do math with it
+                if bet > 0: # you can't bet a negative amount of money -- would be nice if you could in real life though 😜
+                    return bet
+                else:
+                    print("Bet amount must be a positive number. Please try again.")
+            except ValueError: 
+                print("Invalid input. Please enter a number.")
 
     # get the user's number bet
     def getNumberBet(self):
         number = input("Enter your number bet (0-36, 00): ")
-        return number
+        if number == "00":
+            return 37
+        return int(number)
+    
+    # get the user's color bet
+    def getColorBet(self):
+        color_string = input("Enter your color bet (red, black, green): ").lower().strip() # convert to lowercase and remove leading/trailing whitespace
+        
+        # validate the color input
+        while color_string not in ["red", "black", "green"]:
+            color_string = input("Invalid color. Please enter red, black, or green: ").lower().strip()
+        
+        # convert the color string to a Color enum
+        if color_string == "red":
+            color = Color.RED
+        elif color_string == "black":
+            color = Color.BLACK
+        else:
+            color = Color.GREEN
+        return color
     
     # tell the user if they have won or lost
     def displayOutcome(self, outcome):
-        if outcome == True:
+        if outcome:
             print("Congratulations! You have won!")
         else:
             print("Sorry, you have lost.")
