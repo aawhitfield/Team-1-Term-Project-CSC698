@@ -18,8 +18,8 @@ screen.displayMenu()
 # get the user's menu choice
 choice = screen.getMenuChoice()
 
-# loop until the user chooses to quit
-while choice != "4":
+# loop until the user chooses to quit or runs out of money
+while choice != "4" and balance > 0:
     # display the user's current balance
     screen.displayBalance(balance)
     
