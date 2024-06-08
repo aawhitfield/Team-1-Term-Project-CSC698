@@ -40,6 +40,14 @@ class Roulette:
 
     def isWinnerByColor(self, color):
         return self.colors[self.ball] == color
+    
+    def isWinnerByOddEven(self, odd_or_even):
+        if self.ball == 0 or self.ball == 37:
+            return False  # 0 and 00 are neither odd nor even in roulette
+        if odd_or_even == "odd":
+            return self.ball % 2 != 0 # standard CS way to check for odd numbers - if the number divided by 2 has a remainder, it's odd
+        elif odd_or_even == "even":
+            return self.ball % 2 == 0 # if the number is divisible by 2, it's even
         
     # calculate the amount of money the user has won
     def calculateWinnings(self, bet, payout_ratio):

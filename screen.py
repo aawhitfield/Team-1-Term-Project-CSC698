@@ -84,6 +84,15 @@ class Screen:
             color = Color.GREEN
         return color
     
+    # get the user's odd or even bet
+    def getOddEvenBet(self):
+        odd_even = input("Enter your odd or even bet: ").lower().strip() # convert to lowercase and remove leading/trailing whitespace
+        
+        # validate the odd/even input
+        while odd_even not in ["odd", "even"]: # only two options -- the array of options is just a nice way to not have to write compound conditions
+            odd_even = input("Invalid input. Please enter odd or even: ").lower().strip() # re-prompt the user repeatedly until they enter a valid input
+        return odd_even
+    
     # tell the user if they have won or lost
     def displayOutcome(self, outcome):
         if outcome:

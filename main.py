@@ -94,6 +94,39 @@ while choice != "4":
             balance -= bet
             screen.displayBalance(balance)
 
+# ~~~~~~~~~~~~~~~~ CHOICE  3 ~~~~~~~~~~~~~~~~~~~~~~~ Bet on odd or even
+    elif choice == "3":
+        # get the user's odd or even bet
+        odd_or_even = screen.getOddEvenBet()
+
+        # spin the wheel
+        ball, color = roulette.spin()
+
+        # display the ball pocket number to the user
+        screen.displayBall(ball, color)
+        print()
+
+        # determine if the user has won
+        if roulette.isWinnerByOddEven(odd_or_even):
+            # the payout ratio for betting on odd or even is 1:1
+            payout_ratio = 1
+            # calculate the user's winnings
+            winnings = roulette.calculateWinnings(bet, payout_ratio)
+
+            # update the user's balance
+            balance += bet
+            balance += winnings
+
+            # display the user's winnings
+            screen.displayWinnings(winnings, bet)
+            screen.displayBalance(balance)
+
+        else:
+            # display the user's loss
+            screen.displayLoss(bet)
+            balance -= bet
+            screen.displayBalance(balance)
+
     # display the user's options
     screen.displayMenu()
     
