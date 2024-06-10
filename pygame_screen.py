@@ -66,8 +66,9 @@ class PyGameScreen:
         input_box = pygame.Rect(300, 650, 140, 48)  # Create a rectangle for the input box
         color_inactive = pygame.Color('lightskyblue3')  # Inactive color for the input box
         color_active = pygame.Color('dodgerblue2')  # Active color for the input box
-        color = color_inactive  # Current color of the input box
-        active = False  # State to track if the input box is active
+        color = color_active  # Start with the active color to automatically focus
+        active = True  # Automatically set the input box to active
+        # this will allow the user to start typing without having to click on the input box
         text = ''  # Text entered by the user
         done = False  # State to track when input is complete
 
