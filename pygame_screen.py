@@ -183,7 +183,6 @@ class PyGameScreen:
         else:
             self.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
-
         pygame.display.flip()
         pygame.time.wait(2000)
 
@@ -205,7 +204,6 @@ class PyGameScreen:
         else:
             self.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
-
         pygame.display.flip()
         pygame.time.wait(2000)
 
@@ -227,7 +225,6 @@ class PyGameScreen:
         else:
             self.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
-
         pygame.display.flip()
         pygame.time.wait(2000)
 
@@ -237,6 +234,13 @@ class PyGameScreen:
         running = True  # State to track if the game is running
 
         while running:
+            if self.balance <= 0:
+                running = False
+                self.display_message("Game over! You have no money left.", (100, 800))
+                pygame.display.flip()
+                pygame.time.wait(3000)
+                break
+
             self.display_menu()  # Display the menu
             choice = self.get_user_input("Enter your choice:")  # Get the user's menu choice
 
