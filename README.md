@@ -27,7 +27,7 @@ A simple roulette game simulation in Python, allowing users to place bets on num
 
 Run the game using Python:
 ```bash
-python main.py
+python3 main.py
 ```
 Follow the on-screen prompts to place your bets and spin the roulette wheel. You start with a balance of $100 and can bet on numbers, colors, or whether the result will be odd or even.
 
