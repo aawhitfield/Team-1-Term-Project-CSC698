@@ -26,9 +26,14 @@ class PyGameScreen:
         text = self.font.render(message, True, (255, 255, 255))  # Render the text to an image
         self.screen.blit(text, pos)  # Draw the text image on the screen at the specified position
 
+    def display_balance(self):
+        """Display the current balance at the top of the screen."""
+        self.display_message(f"Current Balance: ${self.balance}", (100, 50))
+    
     def display_welcome(self):
         """Display the welcome screen."""
         self.screen.fill((0, 0, 0))  # Fill the screen with black
+        self.display_balance()
         self.display_message('Welcome to Roulette!', (100, 100))
         self.display_message('You have $100 to start with.', (100, 200))
         self.display_message('Good luck!', (100, 300))
@@ -48,6 +53,7 @@ class PyGameScreen:
     def display_menu(self):
         """Display the main menu with options."""
         self.screen.fill((0, 0, 0))  # Fill the screen with black
+        self.display_balance()
         self.display_message('1. Bet on a number', (100, 100))
         self.display_message('2. Bet on a color', (100, 200))
         self.display_message('3. Bet on odd or even', (100, 300))
@@ -94,6 +100,7 @@ class PyGameScreen:
                             text += event.unicode
 
             self.screen.fill((0, 0, 0))  # Clear the screen
+            self.display_balance()
             self.display_menu()  # Redraw the menu
             self.display_message(prompt, (100, 600))  # Display the prompt
             txt_surface = self.font.render(text, True, color)  # Render the text entered by the user
