@@ -1,11 +1,12 @@
 import pygame
 import sys
+import time
 from color import Color
 from roulette import Roulette
 
 class PyGameScreen:
     """Class to handle the UI and user interactions using PyGame."""
-    
+
     def __init__(self):
         """Initialize the PyGame screen and set up initial game settings."""
         pygame.init()  # Initialize all imported pygame modules
@@ -18,6 +19,10 @@ class PyGameScreen:
         self.background_color = (0, 100, 0)  # Dark green background color
         self.text_color = (255, 255, 255)  # White text color
         self.accent_color = (255, 215, 0)  # Gold accent color
+        self.result_color = (255, 255, 0)  # Yellow color for results
+        self.wheel_image = pygame.image.load("wheel.png")
+        self.wheel_image = pygame.transform.scale(self.wheel_image, (400, 400))
+        self.wheel_rect = self.wheel_image.get_rect(center=(400, 400))
         self.banner_image = pygame.image.load("roulette.png")
         self.banner_image = pygame.transform.scale(self.banner_image, (400, 200))
 
@@ -167,13 +172,39 @@ class PyGameScreen:
             else:
                 self.display_message("Invalid input. Please enter odd or even.", (100, 650))
 
+    def spin_wheel_animation(self):
+        """Display the spinning wheel animation."""
+        overlay = pygame.Surface((800, 800))  # Create a transparent overlay
+        overlay.set_alpha(255)  # Set transparency level
+        overlay.fill((0, 0, 0))  # Fill the overlay with black color
+        angle = 0
+
+        start_time = time.time()
+        while time.time() - start_time < 2:  # Rotate for 2 seconds
+            self.screen.fill(self.background_color)
+            self.display_balance()
+            self.display_menu()
+
+            angle += 10  # Rotate the image
+            rotated_image = pygame.transform.rotate(self.wheel_image, angle)
+            new_rect = rotated_image.get_rect(center=self.wheel_rect.center)
+
+            self.screen.blit(overlay, (0, 0))  # Apply the transparent overlay
+            self.screen.blit(rotated_image, new_rect.topleft)
+            pygame.display.flip()
+            self.clock.tick(30)
+
     def handle_bet_on_number(self):
         """Handle the bet on a specific number."""
         bet = self.get_bet_amount()
         number = self.get_number_bet()
 
+        self.spin_wheel_animation()
         ball, color = self.roulette.spin()  # Spin the wheel
-        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700))
+        self.screen.fill(self.background_color)
+        self.display_balance()
+        self.display_menu()
+        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
         pygame.display.flip()
         pygame.time.wait(2000)
 
@@ -181,7 +212,7 @@ class PyGameScreen:
             payout_ratio = 35
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.balance += bet + winnings
-            self.display_message(f"You won ${winnings + bet} (including bet)!", (100, 750))
+            self.display_message(f"You won ${winnings + bet} (plus bet)!", (100, 750))
         else:
             self.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
@@ -193,8 +224,12 @@ class PyGameScreen:
         bet = self.get_bet_amount()
         color = self.get_color_bet()
 
+        self.spin_wheel_animation()
         ball, result_color = self.roulette.spin()  # Spin the wheel
-        self.display_message(f"The ball landed in pocket {ball} ({result_color.name.lower()})", (100, 700))
+        self.screen.fill(self.background_color)
+        self.display_balance()
+        self.display_menu()
+        self.display_message(f"The ball landed in pocket {ball} ({result_color.name.lower()})", (100, 700), self.result_color)
         pygame.display.flip()
         pygame.time.wait(2000)
 
@@ -214,8 +249,12 @@ class PyGameScreen:
         bet = self.get_bet_amount()
         odd_even = self.get_odd_even_bet()
 
+        self.spin_wheel_animation()
         ball, color = self.roulette.spin()  # Spin the wheel
-        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700))
+        self.screen.fill(self.background_color)
+        self.display_balance()
+        self.display_menu()
+        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
         pygame.display.flip()
         pygame.time.wait(2000)
 
@@ -256,3 +295,4 @@ class PyGameScreen:
                 self.handle_bet_on_odd_even()
 
         pygame.quit()  # Quit pygame
+
