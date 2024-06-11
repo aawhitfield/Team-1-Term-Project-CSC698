@@ -18,6 +18,8 @@ class PyGameScreen:
         self.background_color = (0, 100, 0)  # Dark green background color
         self.text_color = (255, 255, 255)  # White text color
         self.accent_color = (255, 215, 0)  # Gold accent color
+        self.banner_image = pygame.image.load("roulette.png")
+        self.banner_image = pygame.transform.scale(self.banner_image, (400, 200))
 
     def display_message(self, message, pos, color=None):
         """Render and display a message on the screen.
@@ -40,10 +42,10 @@ class PyGameScreen:
         """Display the welcome screen."""
         self.screen.fill(self.background_color)  # Fill the screen with the background color
         self.display_balance()
-        self.display_message('Welcome to Roulette!', (100, 100))
-        self.display_message('You have $100 to start with.', (100, 200))
-        self.display_message('Good luck!', (100, 300))
-        self.display_message('Press any key to continue...', (100, 400))
+        self.screen.blit(self.banner_image, (200, 150))  # Position the image lower
+        self.display_message('You have $100 to start with.', (100, 400))
+        self.display_message('Good luck!', (100, 500))
+        self.display_message('Press any key to continue...', (100, 600))
         pygame.display.flip()  # Update the full display Surface to the screen
 
         # Wait for the user to press any key to continue
@@ -221,7 +223,7 @@ class PyGameScreen:
             payout_ratio = 1
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.balance += bet + winnings
-            self.display_message(f"You won ${winnings + bet} (including bet)!", (100, 750))
+            self.display_message(f"You won ${winnings + bet} (plus bet)!", (100, 750))
         else:
             self.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
