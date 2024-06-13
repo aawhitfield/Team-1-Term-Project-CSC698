@@ -68,37 +68,18 @@ class PyGameScreen:
         """Display the main menu with options."""
         self.screen.fill(self.background_color)  # Fill the screen with the background color
         self.display_balance()
-        self.display_message('Main Menu', (100, 100), self.accent_color)
-        self.display_message('1. Outside Bets', (100, 200))
-        self.display_message('2. Inside Bets', (100, 300))
-        self.display_message('3. Quit', (100, 400))
+        self.display_message('1. Bet on a number', (100, 100))
+        self.display_message('2. Bet on a color', (100, 200))
+        self.display_message('3. Bet on odd or even', (100, 300))
+        self.display_message('4. Advanced Bets (Coming Soon)', (100, 400))
+        self.display_message('5. Quit', (100, 500))
         pygame.display.flip()  # Update the full display Surface to the screen
 
-    def display_outside_bets_menu(self):
-        """Display the outside bets menu."""
-        self.screen.fill(self.background_color)  # Fill the screen with the background color
-        self.display_balance()
-        self.display_message('Outside Bets', (100, 100), self.accent_color)
-        self.display_message('1. Bet on a color', (100, 200))
-        self.display_message('2. Bet on odd or even', (100, 300))
-        self.display_message('3. Return to main menu', (100, 400))
-        pygame.display.flip()  # Update the full display Surface to the screen
-
-    def display_inside_bets_menu(self):
-        """Display the inside bets menu."""
-        self.screen.fill(self.background_color)  # Fill the screen with the background color
-        self.display_balance()
-        self.display_message('Inside Bets', (100, 100), self.accent_color)
-        self.display_message('1. Bet on a number', (100, 200))
-        self.display_message('2. Return to main menu', (100, 300))
-        pygame.display.flip()  # Update the full display Surface to the screen
-
-    def get_user_input(self, prompt="", menu_function=None):
+    def get_user_input(self, prompt=""):
         """Get user input from the screen.
 
         Args:
             prompt (str): The prompt message to display.
-            menu_function (function): Function to call to display a specific menu.
 
         Returns:
             str: The user input.
@@ -108,6 +89,7 @@ class PyGameScreen:
         color_active = self.accent_color  # Active color for the input box
         color = color_active  # Start with the active color to automatically focus
         active = True  # Automatically set the input box to active
+        # this will allow the user to start typing without having to click on the input box
         text = ''  # Text entered by the user
         done = False  # State to track when input is complete
 
@@ -117,6 +99,7 @@ class PyGameScreen:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:  # Handle mouse click
+                    # Toggle the active state if the input box is clicked
                     if input_box.collidepoint(event.pos):
                         active = not active
                     else:
@@ -133,8 +116,7 @@ class PyGameScreen:
 
             self.screen.fill(self.background_color)  # Clear the screen with background color
             self.display_balance()
-            if menu_function:
-                menu_function()  # Call the appropriate menu function
+            self.display_menu()  # Redraw the menu
             self.display_message(prompt, (100, 600))  # Display the prompt
             txt_surface = self.font.render(text, True, color)  # Render the text entered by the user
             width = max(200, txt_surface.get_width() + 10)  # Set the width of the input box
@@ -145,7 +127,6 @@ class PyGameScreen:
             self.clock.tick(30)  # Control the loop's frame rate
 
         return text  # Return the text entered by the user
-
 
     def get_bet_amount(self):
         """Get the bet amount from the user, ensuring valid input."""
@@ -204,6 +185,7 @@ class PyGameScreen:
         while time.time() - start_time < 2:  # Rotate for 2 seconds
             self.screen.fill(self.background_color)
             self.display_balance()
+            self.display_menu()
 
             angle += 10  # Rotate the image
             rotated_image = pygame.transform.rotate(self.wheel_image, angle)
@@ -223,6 +205,7 @@ class PyGameScreen:
         ball, color = self.roulette.spin()  # Spin the wheel
         self.screen.fill(self.background_color)
         self.display_balance()
+        self.display_menu()
         self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
         pygame.display.flip()
         pygame.time.wait(2000)
@@ -247,6 +230,7 @@ class PyGameScreen:
         ball, result_color = self.roulette.spin()  # Spin the wheel
         self.screen.fill(self.background_color)
         self.display_balance()
+        self.display_menu()
         self.display_message(f"The ball landed in pocket {ball} ({result_color.name.lower()})", (100, 700), self.result_color)
         pygame.display.flip()
         pygame.time.wait(2000)
@@ -271,6 +255,7 @@ class PyGameScreen:
         ball, color = self.roulette.spin()  # Spin the wheel
         self.screen.fill(self.background_color)
         self.display_balance()
+        self.display_menu()
         self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
         pygame.display.flip()
         pygame.time.wait(2000)
@@ -307,25 +292,17 @@ class PyGameScreen:
                 break
 
             self.display_menu()  # Display the menu
-            choice = self.get_user_input("Enter your choice:", menu_function=self.display_menu)  # Get the user's menu choice
+            choice = self.get_user_input("Enter your choice:")  # Get the user's menu choice
 
-            if choice == "3":  # Quit the game
+            if choice == "5":  # Quit the game
                 running = False
             elif choice == "1":
-                self.display_outside_bets_menu()
-                outside_choice = self.get_user_input("Enter your choice:", menu_function=self.display_outside_bets_menu)
-                if outside_choice == "1":
-                    self.handle_bet_on_color()
-                elif outside_choice == "2":
-                    self.handle_bet_on_odd_even()
-                elif outside_choice == "3":
-                    continue
+                self.handle_bet_on_number()
             elif choice == "2":
-                self.display_inside_bets_menu()
-                inside_choice = self.get_user_input("Enter your choice:", menu_function=self.display_inside_bets_menu)
-                if inside_choice == "1":
-                    self.handle_bet_on_number()
-                elif inside_choice == "2":
-                    continue
+                self.handle_bet_on_color()
+            elif choice == "3":
+                self.handle_bet_on_odd_even()
+            elif choice == "4":
+                self.show_advanced_bets()
 
         pygame.quit()  # Quit pygame
