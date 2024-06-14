@@ -234,13 +234,14 @@ class PyGameScreen:
         if self.roulette.isWinnerByNumber(number):  # Check if the user won
             payout_ratio = 35
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
-            self.balance += bet + winnings
-            self.display_message(f"You won ${winnings + bet} (plus bet)!", (100, 750))
+            self.balance += winnings
+            self.display_message(f"You won ${winnings}!", (100, 750))
         else:
             self.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
         pygame.display.flip()
         pygame.time.wait(2000)
+
 
     def handle_bet_on_color(self):
         """Handle the bet on a color."""
@@ -258,13 +259,14 @@ class PyGameScreen:
         if self.roulette.isWinnerByColor(color):  # Check if the user won
             payout_ratio = 35 if color == Color.GREEN else 1
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
-            self.balance += bet + winnings
-            self.display_message(f"You won ${winnings + bet} (including bet)!", (100, 750))
+            self.balance += winnings
+            self.display_message(f"You won ${winnings}!", (100, 750))
         else:
             self.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
         pygame.display.flip()
         pygame.time.wait(2000)
+
 
     def handle_bet_on_odd_even(self):
         """Handle the bet on odd or even."""
@@ -282,8 +284,8 @@ class PyGameScreen:
         if self.roulette.isWinnerByOddEven(odd_even):  # Check if the user won
             payout_ratio = 1
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
-            self.balance += bet + winnings
-            self.display_message(f"You won ${winnings + bet} (plus bet)!", (100, 750))
+            self.balance += winnings
+            self.display_message(f"You won ${winnings}!", (100, 750))
         else:
             self.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
