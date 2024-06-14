@@ -2,7 +2,12 @@
 
 A simple roulette game simulation in Python, allowing users to place bets on numbers, colors, and odd/even outcomes. The game is designed for educational purposes and demonstrates basic Python programming concepts, including classes, enums, input validation, and game logic.
 
+## Authers
+- Edgar
+
 ## Table of Contents
+
+
 
 - [Installation](#installation)
 - [Usage](#usage)
