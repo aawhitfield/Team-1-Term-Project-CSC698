@@ -68,6 +68,7 @@ class PyGameScreen:
         """Display the main menu with options."""
         self.screen.fill(self.background_color)  # Fill the screen with the background color
         self.display_balance()
+        pygame.image.load("Roulette_Board.png")
         self.display_message('Main Menu', (100, 100), self.accent_color)
         self.display_message('1. Outside Bets', (100, 200))
         self.display_message('2. Inside Bets', (100, 300))
