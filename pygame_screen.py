@@ -178,11 +178,11 @@ class PyGameScreen:
     def get_color_bet(self):
         """Get the user's color bet, ensuring valid input."""
         while True:
-            color_string = self.get_user_input("Enter your color bet (red, black, green):").lower().strip()
-            if color_string in ["red", "black", "green"]:
-                return Color.RED if color_string == "red" else Color.BLACK if color_string == "black" else Color.GREEN
+            color_string = self.get_user_input("Enter your color bet (red, black):").lower().strip()
+            if color_string in ["red", "black"]:
+                return Color.RED if color_string == "red" else Color.BLACK
             else:
-                self.display_message("Invalid color. Please enter red, black, or green.", (100, 650))
+                self.display_message("Invalid color. Please enter red, black.", (100, 650))
 
     def get_odd_even_bet(self):
         """Get the user's odd/even bet, ensuring valid input."""
