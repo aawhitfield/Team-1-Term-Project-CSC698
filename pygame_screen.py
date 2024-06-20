@@ -302,6 +302,30 @@ class PyGameScreen:
         pygame.display.flip()
         pygame.time.wait(2000)
 
+    def handle_bet_on_street(self):
+        """Handle a street bet."""
+        bet = self.get_bet_amount()
+        street = self.get_street_bet()
+
+        self.spin_wheel_animation()
+        ball, color = self.roulette.spin()  # Spin the wheel
+        self.screen.fill(self.background_color)
+        self.display_balance()
+        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
+        if self.roulette.isWinnerByStreet(street):  # Check if the user won
+            payout_ratio = 11
+            winnings = self.roulette.calculateWinnings(bet, payout_ratio)
+            self.balance += winnings
+            self.display_message(f"You won ${winnings}!", (100, 750))
+        else:
+            self.balance -= bet
+            self.display_message(f"You lost ${bet}.", (100, 750))
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
     def show_advanced_bets(self):
         """Display the advanced bets image for 5 seconds and then return to menu."""
         self.screen.fill(self.background_color)
