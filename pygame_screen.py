@@ -86,6 +86,9 @@ class PyGameScreen:
         self.display_message('1. Bet on a color', (100, 200))
         self.display_message('2. Bet on odd or even', (100, 300))
         self.display_message('3. Return to main menu', (100, 400))
+        roulette_board = pygame.image.load("Roulette_Board.png")
+        roulette_board = pygame.transform.scale(roulette_board, (250, 500))
+        self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
         pygame.display.flip()  # Update the full display Surface to the screen
 
     def display_inside_bets_menu(self):
@@ -95,6 +98,9 @@ class PyGameScreen:
         self.display_message('Inside Bets', (100, 100), self.accent_color)
         self.display_message('1. Bet on a number', (100, 200))
         self.display_message('2. Return to main menu', (100, 300))
+        roulette_board = pygame.image.load("Roulette_Board.png")
+        roulette_board = pygame.transform.scale(roulette_board, (250, 500))
+        self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
         pygame.display.flip()  # Update the full display Surface to the screen
 
     def get_user_input(self, prompt="", menu_function=None):
@@ -114,6 +120,7 @@ class PyGameScreen:
         active = True  # Automatically set the input box to active
         text = ''  # Text entered by the user
         done = False  # State to track when input is complete
+
 
         while not done:
             for event in pygame.event.get():
@@ -145,6 +152,9 @@ class PyGameScreen:
             input_box.w = width  # Update the input box width
             self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))  # Draw the text on the screen
             pygame.draw.rect(self.screen, color, input_box, 2)  # Draw the input box
+            roulette_board = pygame.image.load("Roulette_Board.png")
+            roulette_board = pygame.transform.scale(roulette_board, (250, 500))
+            self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
             pygame.display.flip()  # Update the full display Surface to the screen
             self.clock.tick(30)  # Control the loop's frame rate
 
