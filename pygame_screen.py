@@ -209,6 +209,31 @@ class PyGameScreen:
             else:
                 self.display_message("Invalid input. Please enter odd or even.", (100, 650))
 
+    def __init__(self):
+        # ... (other initialization code)
+        self.valid_streets = self.generate_valid_streets()
+        self.valid_sixlines = self.generate_valid_sixlines()
+
+    def generate_valid_streets(self):
+        """Generate a list of valid street bets."""
+        valid_streets = []
+        for i in range(1, 34):
+            if i % 3 == 0:
+                continue
+            street = (i, i + 1, i + 2)
+            valid_streets.append(street)
+        return valid_streets
+
+    def generate_valid_sixlines(self):
+        """Generate a list of valid sixline bets."""
+        valid_sixlines = []
+        for i in range(1, 31):
+            if i % 3 == 2:
+                continue
+            sixline = (i, i + 1, i + 2, i + 3, i + 4, i + 5)
+            valid_sixlines.append(sixline)
+        return valid_sixlines
+
     def get_street_bet(self):
         """Get the user's street bet, ensuring valid input."""
         while True:
@@ -224,14 +249,7 @@ class PyGameScreen:
         Checks if the given street of numbers is a valid street bet.
         A valid street bet consists of three consecutive numbers on the roulette wheel.
         """
-        if len(street) != 3 or any(num not in self.numbers for num in street):
-            return False
-
-        sorted_street = sorted(street)
-        for i in range(len(sorted_street) - 2):
-            if sorted_street[i] + 1 == sorted_street[i + 1] and sorted_street[i] + 2 == sorted_street[i + 2]:
-                return True
-        return False
+        return tuple(sorted(street)) in self.valid_streets
 
     def get_sixline_bet(self):
         """Get the user's sixline bet, ensuring valid input."""
@@ -248,20 +266,7 @@ class PyGameScreen:
         Checks if the given sixline of numbers is a valid sixline bet.
         A valid sixline bet consists of six consecutive numbers on the roulette wheel.
         """
-        if len(sixline) != 6 or any(num not in self.numbers for num in sixline):
-            return False
-
-        sorted_sixline = sorted(sixline)
-        for i in range(len(sorted_sixline) - 5):
-            if (
-                    sorted_sixline[i] + 1 == sorted_sixline[i + 1]
-                    and sorted_sixline[i] + 2 == sorted_sixline[i + 2]
-                    and sorted_sixline[i] + 3 == sorted_sixline[i + 3]
-                    and sorted_sixline[i] + 4 == sorted_sixline[i + 4]
-                    and sorted_sixline[i] + 5 == sorted_sixline[i + 5]
-            ):
-                return True
-        return False
+        return tuple(sorted(sixline)) in self.valid_sixlines
 
     def spin_wheel_animation(self):
         """Display the spinning wheel animation."""
