@@ -98,7 +98,8 @@ class PyGameScreen:
         self.display_message('Inside Bets', (100, 100), self.accent_color)
         self.display_message('1. Bet on a number', (100, 200))
         self.display_message('2. Street Bet', (100,300))
-        self.display_message('3. Return to main menu', (100, 400))
+        self.display_message('3. Sixline', (100, 400))
+        self.display_message('4. Return to main menu', (100, 500))
         roulette_board = pygame.image.load("Roulette_Board.png")
         roulette_board = pygame.transform.scale(roulette_board, (250, 500))
         self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
@@ -232,6 +233,36 @@ class PyGameScreen:
                 return True
         return False
 
+    def get_sixline_bet(self):
+        """Get the user's sixline bet, ensuring valid input."""
+        while True:
+            bet_choice = input("Choose a sixline of numbers (e.g., '1,2,3,4,5,6'): ")
+            sixline = [int(num) for num in bet_choice.split(",")]
+            if self.is_valid_sixline(sixline):
+                return tuple(sixline)
+            else:
+                print("Invalid input. Please enter a valid sixline of numbers (e.g., '1,2,3,4,5,6').")
+
+    def is_valid_sixline(self, sixline):
+        """
+        Checks if the given sixline of numbers is a valid sixline bet.
+        A valid sixline bet consists of six consecutive numbers on the roulette wheel.
+        """
+        if len(sixline) != 6 or any(num not in self.numbers for num in sixline):
+            return False
+
+        sorted_sixline = sorted(sixline)
+        for i in range(len(sorted_sixline) - 5):
+            if (
+                    sorted_sixline[i] + 1 == sorted_sixline[i + 1]
+                    and sorted_sixline[i] + 2 == sorted_sixline[i + 2]
+                    and sorted_sixline[i] + 3 == sorted_sixline[i + 3]
+                    and sorted_sixline[i] + 4 == sorted_sixline[i + 4]
+                    and sorted_sixline[i] + 5 == sorted_sixline[i + 5]
+            ):
+                return True
+        return False
+
     def spin_wheel_animation(self):
         """Display the spinning wheel animation."""
         overlay = pygame.Surface((800, 800))  # Create a transparent overlay
@@ -342,6 +373,30 @@ class PyGameScreen:
 
         if self.roulette.isWinnerByStreet(street):  # Check if the user won
             payout_ratio = 11
+            winnings = self.roulette.calculateWinnings(bet, payout_ratio)
+            self.balance += winnings
+            self.display_message(f"You won ${winnings}!", (100, 750))
+        else:
+            self.balance -= bet
+            self.display_message(f"You lost ${bet}.", (100, 750))
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
+    def handle_bet_on_sixline(self):
+        """Handle a street bet."""
+        bet = self.get_bet_amount()
+        street = self.get_sixline_bet()
+
+        self.spin_wheel_animation()
+        ball, color = self.roulette.spin()  # Spin the wheel
+        self.screen.fill(self.background_color)
+        self.display_balance()
+        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
+        if self.roulette.isWinnerBySixline(sixline):  # Check if the user won
+            payout_ratio = 5
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.balance += winnings
             self.display_message(f"You won ${winnings}!", (100, 750))
