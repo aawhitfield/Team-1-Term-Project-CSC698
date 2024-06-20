@@ -207,6 +207,30 @@ class PyGameScreen:
             else:
                 self.display_message("Invalid input. Please enter odd or even.", (100, 650))
 
+    def get_street_bet(self):
+        """Get the user's street bet, ensuring valid input."""
+        while True:
+            bet_choice = input("Choose a row or 'street' of numbers (e.g., '1,2,3'): ")
+            street = [int(num) for num in bet_choice.split(",")]
+            if self.is_valid_street(street):
+                return tuple(street)
+            else:
+                print("Invalid input. Please enter a valid row or 'street' of numbers (e.g., '1,2,3').")
+
+    def is_valid_street(self, street):
+        """
+        Checks if the given street of numbers is a valid street bet.
+        A valid street bet consists of three consecutive numbers on the roulette wheel.
+        """
+        if len(street) != 3 or any(num not in self.numbers for num in street):
+            return False
+
+        sorted_street = sorted(street)
+        for i in range(len(sorted_street) - 2):
+            if sorted_street[i] + 1 == sorted_street[i + 1] and sorted_street[i] + 2 == sorted_street[i + 2]:
+                return True
+        return False
+
     def spin_wheel_animation(self):
         """Display the spinning wheel animation."""
         overlay = pygame.Surface((800, 800))  # Create a transparent overlay
@@ -366,6 +390,8 @@ class PyGameScreen:
                 if inside_choice == "1":
                     self.handle_bet_on_number()
                 elif inside_choice == "2":
+                    self.handle_bet_on_street()
+                elif inside_choice == "3":
                     continue
 
         pygame.quit()  # Quit pygame
