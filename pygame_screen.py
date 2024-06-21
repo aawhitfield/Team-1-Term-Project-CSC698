@@ -72,7 +72,7 @@ class PyGameScreen:
         self.display_message('1. Outside Bets', (100, 200))
         self.display_message('2. Inside Bets', (100, 300))
         self.display_message('3. Quit', (100, 400))
-        roulette_board = pygame.image.load("gameboard.png")
+        roulette_board = pygame.image.load("roulette_gameboard.png")
         roulette_board = pygame.transform.scale(roulette_board, (250, 500))
         self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
 
@@ -86,7 +86,7 @@ class PyGameScreen:
         self.display_message('1. Bet on a color', (100, 200))
         self.display_message('2. Bet on odd or even', (100, 300))
         self.display_message('3. Return to main menu', (100, 400))
-        roulette_board = pygame.image.load("gameboard.png")
+        roulette_board = pygame.image.load("roulette_gameboard.png")
         roulette_board = pygame.transform.scale(roulette_board, (250, 500))
         self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
         pygame.display.flip()  # Update the full display Surface to the screen
@@ -100,7 +100,7 @@ class PyGameScreen:
         self.display_message('2. Street Bet', (100,300))
         self.display_message('3. Sixline', (100, 400))
         self.display_message('4. Return to main menu', (100, 500))
-        roulette_board = pygame.image.load("gameboard.png")
+        roulette_board = pygame.image.load("roulette_gameboard.png")
         roulette_board = pygame.transform.scale(roulette_board, (250, 500))
         self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
         pygame.display.flip()  # Update the full display Surface to the screen
