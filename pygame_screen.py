@@ -26,6 +26,10 @@ class PyGameScreen:
         self.banner_image = pygame.image.load("roulette.png")
         self.banner_image = pygame.transform.scale(self.banner_image, (400, 200))
         self.advanced_bets_image = pygame.image.load("roulette_table.png")
+        
+        # Additional attributes
+        self.valid_streets = self.generate_valid_streets()
+        self.valid_sixlines = self.generate_valid_sixlines()
 
     def display_message(self, message, pos, color=None):
         """Render and display a message on the screen.
@@ -209,11 +213,6 @@ class PyGameScreen:
             else:
                 self.display_message("Invalid input. Please enter odd or even.", (100, 650))
 
-    def __init__(self):
-        # ... (other initialization code)
-        self.valid_streets = self.generate_valid_streets()
-        self.valid_sixlines = self.generate_valid_sixlines()
-
     def generate_valid_streets(self):
         """Generate a list of valid street bets."""
         valid_streets = []
@@ -388,9 +387,9 @@ class PyGameScreen:
         pygame.time.wait(2000)
 
     def handle_bet_on_sixline(self):
-        """Handle a street bet."""
+        """Handle a sixline bet."""
         bet = self.get_bet_amount()
-        street = self.get_sixline_bet()
+        sixline = self.get_sixline_bet()
 
         self.spin_wheel_animation()
         ball, color = self.roulette.spin()  # Spin the wheel
