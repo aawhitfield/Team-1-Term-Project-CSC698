@@ -86,6 +86,9 @@ class PyGameScreen:
         self.display_message('1. Bet on a color', (100, 200))
         self.display_message('2. Bet on odd or even', (100, 300))
         self.display_message('3. Return to main menu', (100, 400))
+        roulette_board = pygame.image.load("Roulette_Board.png")
+        roulette_board = pygame.transform.scale(roulette_board, (250, 500))
+        self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
         pygame.display.flip()  # Update the full display Surface to the screen
 
     def display_inside_bets_menu(self):
@@ -94,7 +97,12 @@ class PyGameScreen:
         self.display_balance()
         self.display_message('Inside Bets', (100, 100), self.accent_color)
         self.display_message('1. Bet on a number', (100, 200))
-        self.display_message('2. Return to main menu', (100, 300))
+        self.display_message('2. Street Bet', (100,300))
+        self.display_message('3. Sixline', (100, 400))
+        self.display_message('4. Return to main menu', (100, 500))
+        roulette_board = pygame.image.load("Roulette_Board.png")
+        roulette_board = pygame.transform.scale(roulette_board, (250, 500))
+        self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
         pygame.display.flip()  # Update the full display Surface to the screen
 
     def get_user_input(self, prompt="", menu_function=None):
@@ -114,6 +122,7 @@ class PyGameScreen:
         active = True  # Automatically set the input box to active
         text = ''  # Text entered by the user
         done = False  # State to track when input is complete
+
 
         while not done:
             for event in pygame.event.get():
@@ -145,6 +154,9 @@ class PyGameScreen:
             input_box.w = width  # Update the input box width
             self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))  # Draw the text on the screen
             pygame.draw.rect(self.screen, color, input_box, 2)  # Draw the input box
+            roulette_board = pygame.image.load("Roulette_Board.png")
+            roulette_board = pygame.transform.scale(roulette_board, (250, 500))
+            self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
             pygame.display.flip()  # Update the full display Surface to the screen
             self.clock.tick(30)  # Control the loop's frame rate
 
@@ -196,6 +208,65 @@ class PyGameScreen:
                 return odd_even
             else:
                 self.display_message("Invalid input. Please enter odd or even.", (100, 650))
+
+    def __init__(self):
+        # ... (other initialization code)
+        self.valid_streets = self.generate_valid_streets()
+        self.valid_sixlines = self.generate_valid_sixlines()
+
+    def generate_valid_streets(self):
+        """Generate a list of valid street bets."""
+        valid_streets = []
+        for i in range(1, 34):
+            if i % 3 == 0:
+                continue
+            street = (i, i + 1, i + 2)
+            valid_streets.append(street)
+        return valid_streets
+
+    def generate_valid_sixlines(self):
+        """Generate a list of valid sixline bets."""
+        valid_sixlines = []
+        for i in range(1, 31):
+            if i % 3 == 2:
+                continue
+            sixline = (i, i + 1, i + 2, i + 3, i + 4, i + 5)
+            valid_sixlines.append(sixline)
+        return valid_sixlines
+
+    def get_street_bet(self):
+        """Get the user's street bet, ensuring valid input."""
+        while True:
+            bet_choice = input("Choose a row or 'street' of numbers (e.g., '1,2,3'): ")
+            street = [int(num) for num in bet_choice.split(",")]
+            if self.is_valid_street(street):
+                return tuple(street)
+            else:
+                print("Invalid input. Please enter a valid row or 'street' of numbers (e.g., '1,2,3').")
+
+    def is_valid_street(self, street):
+        """
+        Checks if the given street of numbers is a valid street bet.
+        A valid street bet consists of three consecutive numbers on the roulette wheel.
+        """
+        return tuple(sorted(street)) in self.valid_streets
+
+    def get_sixline_bet(self):
+        """Get the user's sixline bet, ensuring valid input."""
+        while True:
+            bet_choice = input("Choose a sixline of numbers (e.g., '1,2,3,4,5,6'): ")
+            sixline = [int(num) for num in bet_choice.split(",")]
+            if self.is_valid_sixline(sixline):
+                return tuple(sixline)
+            else:
+                print("Invalid input. Please enter a valid sixline of numbers (e.g., '1,2,3,4,5,6').")
+
+    def is_valid_sixline(self, sixline):
+        """
+        Checks if the given sixline of numbers is a valid sixline bet.
+        A valid sixline bet consists of six consecutive numbers on the roulette wheel.
+        """
+        return tuple(sorted(sixline)) in self.valid_sixlines
 
     def spin_wheel_animation(self):
         """Display the spinning wheel animation."""
@@ -292,6 +363,54 @@ class PyGameScreen:
         pygame.display.flip()
         pygame.time.wait(2000)
 
+    def handle_bet_on_street(self):
+        """Handle a street bet."""
+        bet = self.get_bet_amount()
+        street = self.get_street_bet()
+
+        self.spin_wheel_animation()
+        ball, color = self.roulette.spin()  # Spin the wheel
+        self.screen.fill(self.background_color)
+        self.display_balance()
+        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
+        if self.roulette.isWinnerByStreet(street):  # Check if the user won
+            payout_ratio = 11
+            winnings = self.roulette.calculateWinnings(bet, payout_ratio)
+            self.balance += winnings
+            self.display_message(f"You won ${winnings}!", (100, 750))
+        else:
+            self.balance -= bet
+            self.display_message(f"You lost ${bet}.", (100, 750))
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
+    def handle_bet_on_sixline(self):
+        """Handle a street bet."""
+        bet = self.get_bet_amount()
+        street = self.get_sixline_bet()
+
+        self.spin_wheel_animation()
+        ball, color = self.roulette.spin()  # Spin the wheel
+        self.screen.fill(self.background_color)
+        self.display_balance()
+        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
+        if self.roulette.isWinnerBySixline(sixline):  # Check if the user won
+            payout_ratio = 5
+            winnings = self.roulette.calculateWinnings(bet, payout_ratio)
+            self.balance += winnings
+            self.display_message(f"You won ${winnings}!", (100, 750))
+        else:
+            self.balance -= bet
+            self.display_message(f"You lost ${bet}.", (100, 750))
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
     def show_advanced_bets(self):
         """Display the advanced bets image for 5 seconds and then return to menu."""
         self.screen.fill(self.background_color)
@@ -332,6 +451,8 @@ class PyGameScreen:
                 if inside_choice == "1":
                     self.handle_bet_on_number()
                 elif inside_choice == "2":
+                    self.handle_bet_on_street()
+                elif inside_choice == "3":
                     continue
 
         pygame.quit()  # Quit pygame

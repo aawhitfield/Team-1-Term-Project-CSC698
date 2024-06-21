@@ -48,7 +48,21 @@ class Roulette:
             return self.ball % 2 != 0 # standard CS way to check for odd numbers - if the number divided by 2 has a remainder, it's odd
         elif odd_or_even == "even":
             return self.ball % 2 == 0 # if the number is divisible by 2, it's even
-        
+
+    def isWinnerByStreet(self, street):
+        if self.ball == 0 or self.ball == 37:
+            return False  # 0 and 00 are not part of any street
+
+        # Check if the ball number is in the street bet
+        return self.ball in street
+
+    def isWinnerBySixline(self, sixline):
+        if self.ball == 0 or self.ball == 37:
+            return False  # 0 and 00 are not part of any sixline
+
+        # Check if the ball number is in the sixline bet
+        return self.ball in sixline
+
     # calculate the amount of money the user has won
     def calculateWinnings(self, bet, payout_ratio):
         return bet * payout_ratio
