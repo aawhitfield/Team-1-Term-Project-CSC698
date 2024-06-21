@@ -26,6 +26,10 @@ class PyGameScreen:
         self.banner_image = pygame.image.load("roulette.png")
         self.banner_image = pygame.transform.scale(self.banner_image, (400, 200))
         self.advanced_bets_image = pygame.image.load("roulette_table.png")
+        
+        # Additional attributes
+        self.valid_streets = self.generate_valid_streets()
+        self.valid_sixlines = self.generate_valid_sixlines()
 
     def display_message(self, message, pos, color=None):
         """Render and display a message on the screen.
@@ -194,11 +198,11 @@ class PyGameScreen:
     def get_color_bet(self):
         """Get the user's color bet, ensuring valid input."""
         while True:
-            color_string = self.get_user_input("Enter your color bet (red, black, green):").lower().strip()
-            if color_string in ["red", "black", "green"]:
-                return Color.RED if color_string == "red" else Color.BLACK if color_string == "black" else Color.GREEN
+            color_string = self.get_user_input("Enter your color bet (red, black):").lower().strip()
+            if color_string in ["red", "black"]:
+                return Color.RED if color_string == "red" else Color.BLACK
             else:
-                self.display_message("Invalid color. Please enter red, black, or green.", (100, 650))
+                self.display_message("Invalid color. Please enter red, black.", (100, 650))
 
     def get_odd_even_bet(self):
         """Get the user's odd/even bet, ensuring valid input."""
@@ -208,11 +212,6 @@ class PyGameScreen:
                 return odd_even
             else:
                 self.display_message("Invalid input. Please enter odd or even.", (100, 650))
-
-    def __init__(self):
-        # ... (other initialization code)
-        self.valid_streets = self.generate_valid_streets()
-        self.valid_sixlines = self.generate_valid_sixlines()
 
     def generate_valid_streets(self):
         """Generate a list of valid street bets."""
@@ -388,9 +387,9 @@ class PyGameScreen:
         pygame.time.wait(2000)
 
     def handle_bet_on_sixline(self):
-        """Handle a street bet."""
+        """Handle a sixline bet."""
         bet = self.get_bet_amount()
-        street = self.get_sixline_bet()
+        sixline = self.get_sixline_bet()
 
         self.spin_wheel_animation()
         ball, color = self.roulette.spin()  # Spin the wheel
