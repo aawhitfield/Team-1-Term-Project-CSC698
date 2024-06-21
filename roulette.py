@@ -53,6 +53,16 @@ class Roulette:
             return self.ball % 2 != 0 # standard CS way to check for odd numbers - if the number divided by 2 has a remainder, it's odd
         elif odd_or_even == "even":
             return self.ball % 2 == 0 # if the number is divisible by 2, it's even
+        
+    # Add this new method to the Roulette class
+    def isWinnerByHighLow(self, high_low):
+        if self.ball == 0 or self.ball == 37:
+            return False  # 0 and 00 are neither high nor low in roulette
+        if high_low == "high":
+            return 19 <= self.ball <= 36
+        elif high_low == "low":
+            return 1 <= self.ball <= 18
+
 
     def isWinnerByStreet(self, street):
         if self.ball == 0 or self.ball == 37:
