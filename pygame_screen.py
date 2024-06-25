@@ -4,6 +4,7 @@ import time
 from color import Color
 from roulette import Roulette
 from screen_info import ScreenInfo
+from outside import Outside
 
 class PyGameScreen:
     """Class to handle the UI and user interactions using PyGame."""
@@ -29,6 +30,10 @@ class PyGameScreen:
         self.banner_image = pygame.transform.scale(self.banner_image, (self.screen_info.width // 2, 200))
         self.advanced_bets_image = pygame.image.load("roulette_table.png")
         
+        # Initialize Outside bets handler
+        self.outside = Outside(self.screen, self.roulette, self.font, self.background_color, self.accent_color, self.result_color, self.clock, self.spin_wheel_animation)
+
+
         # Additional attributes
         self.valid_streets = self.generate_valid_streets()
         self.valid_sixlines = self.generate_valid_sixlines()
@@ -116,7 +121,6 @@ class PyGameScreen:
         text = ''  # Text entered by the user
         done = False  # State to track when input is complete
 
-
         while not done:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:  # Handle window close button
@@ -155,52 +159,50 @@ class PyGameScreen:
 
         return text  # Return the text entered by the user
 
+    def spin_wheel_animation(self):
+        """Display the spinning wheel animation."""
+        overlay = pygame.Surface((self.screen_info.width, self.screen_info.height))  # Create a transparent overlay
+        overlay.set_alpha(255)  # Set transparency level
+        overlay.fill((0, 0, 0))  # Fill the overlay with black color
+        angle = 0
 
-    def get_bet_amount(self):
-        """Get the bet amount from the user, ensuring valid input."""
-        while True:
-            bet = self.get_user_input("Enter your bet amount:")
-            try:
-                bet = int(bet)  # Convert the input to an integer
-                if bet > 0:
-                    return bet
-                else:
-                    self.display_message("Bet amount must be a positive number. Please try again.", (100, 650))
-            except ValueError:
-                self.display_message("Invalid input. Please enter a number.", (100, 650))
+        start_time = time.time()
+        while time.time() - start_time < 2:  # Rotate for 2 seconds
+            self.screen.fill(self.background_color)
+            self.display_balance()
 
-    def get_number_bet(self):
-        """Get the user's number bet, ensuring valid input."""
-        while True:
-            number = self.get_user_input("Enter your number bet (0-36, 00):")
-            if number == "00":
-                return 37
-            try:
-                number = int(number)
-                if 0 <= number <= 36:
-                    return number
-                else:
-                    self.display_message("Number must be between 0 and 36 or '00'. Please try again.", (100, 650))
-            except ValueError:
-                self.display_message("Invalid input. Please enter a number between 0 and 36 or '00'.", (100, 650))
+            angle += 10  # Rotate the image
+            rotated_image = pygame.transform.rotate(self.wheel_image, angle)
+            new_rect = rotated_image.get_rect(center=self.wheel_rect.center)
 
-    def get_color_bet(self):
-        """Get the user's color bet, ensuring valid input."""
-        while True:
-            color_string = self.get_user_input("Enter your color bet (red, black):").lower().strip()
-            if color_string in ["red", "black"]:
-                return Color.RED if color_string == "red" else Color.BLACK
-            else:
-                self.display_message("Invalid color. Please enter red, black.", (100, 650))
+            self.screen.blit(overlay, (0, 0))  # Apply the transparent overlay
+            self.screen.blit(rotated_image, new_rect.topleft)
+            pygame.display.flip()
+            self.clock.tick(30)
 
-    def get_odd_even_bet(self):
-        """Get the user's odd/even bet, ensuring valid input."""
-        while True:
-            odd_even = self.get_user_input("Enter your odd or even bet:").lower().strip()
-            if odd_even in ["odd", "even"]:
-                return odd_even
-            else:
-                self.display_message("Invalid input. Please enter odd or even.", (100, 650))
+    def handle_bet_on_number(self):
+        """Handle the bet on a specific number."""
+        bet = self.get_bet_amount()
+        number = self.get_number_bet()
+
+        self.spin_wheel_animation()
+        ball, color = self.roulette.spin()  # Spin the wheel
+        self.screen.fill(self.background_color)
+        self.display_balance()
+        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
+        if self.roulette.isWinnerByNumber(number):  # Check if the user won
+            payout_ratio = 35
+            winnings = self.roulette.calculateWinnings(bet, payout_ratio)
+            self.balance += winnings
+            self.display_message(f"You won ${winnings}!", (100, 750))
+        else:
+            self.balance -= bet
+            self.display_message(f"You lost ${bet}.", (100, 750))
+        pygame.display.flip()
+        pygame.time.wait(2000)
 
     def generate_valid_streets(self):
         """Generate a list of valid street bets."""
@@ -255,160 +257,6 @@ class PyGameScreen:
         A valid sixline bet consists of six consecutive numbers on the roulette wheel.
         """
         return tuple(sorted(sixline)) in self.valid_sixlines
-
-    def spin_wheel_animation(self):
-        """Display the spinning wheel animation."""
-        overlay = pygame.Surface((self.screen_info.width, self.screen_info.height))  # Create a transparent overlay
-        overlay.set_alpha(255)  # Set transparency level
-        overlay.fill((0, 0, 0))  # Fill the overlay with black color
-        angle = 0
-
-        start_time = time.time()
-        while time.time() - start_time < 2:  # Rotate for 2 seconds
-            self.screen.fill(self.background_color)
-            self.display_balance()
-
-            angle += 10  # Rotate the image
-            rotated_image = pygame.transform.rotate(self.wheel_image, angle)
-            new_rect = rotated_image.get_rect(center=self.wheel_rect.center)
-
-            self.screen.blit(overlay, (0, 0))  # Apply the transparent overlay
-            self.screen.blit(rotated_image, new_rect.topleft)
-            pygame.display.flip()
-            self.clock.tick(30)
-
-    def handle_bet_on_number(self):
-        """Handle the bet on a specific number."""
-        bet = self.get_bet_amount()
-        number = self.get_number_bet()
-
-        self.spin_wheel_animation()
-        ball, color = self.roulette.spin()  # Spin the wheel
-        self.screen.fill(self.background_color)
-        self.display_balance()
-        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
-        pygame.display.flip()
-        pygame.time.wait(2000)
-
-        if self.roulette.isWinnerByNumber(number):  # Check if the user won
-            payout_ratio = 35
-            winnings = self.roulette.calculateWinnings(bet, payout_ratio)
-            self.balance += winnings
-            self.display_message(f"You won ${winnings}!", (100, 750))
-        else:
-            self.balance -= bet
-            self.display_message(f"You lost ${bet}.", (100, 750))
-        pygame.display.flip()
-        pygame.time.wait(2000)
-
-# ****************************  Outside Bets  ****************************
-
-
-    def display_outside_bets_menu(self):
-        """Display the outside bets menu."""
-        self.screen.fill(self.background_color)  # Fill the screen with the background color
-        self.display_balance()
-        self.display_message('Outside Bets', (100, 100), self.accent_color)
-        self.display_message('1. Bet on a color', (100, 200))
-        self.display_message('2. Bet on odd or even', (100, 300))
-        self.display_message('3. Bet on high/low', (100, 400))
-        self.display_message('4. Return to main menu', (100, 500))
-        roulette_board = pygame.image.load("Roulette_Board.png")
-        roulette_board = pygame.transform.scale(roulette_board, (250, 500))
-        self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
-        pygame.display.flip()  # Update the full display Surface to the screen
-
-    def handle_bet_on_color(self):
-        """Handle the bet on a color."""
-        bet = self.get_bet_amount()
-        color = self.get_color_bet()
-
-        self.spin_wheel_animation()
-        ball, result_color = self.roulette.spin()  # Spin the wheel
-        self.screen.fill(self.background_color)
-        self.display_balance()
-        self.display_message(f"The ball landed in pocket {ball} ({result_color.name.lower()})", (100, 700), self.result_color)
-        pygame.display.flip()
-        pygame.time.wait(2000)
-
-        if self.roulette.isWinnerByColor(color):  # Check if the user won
-            payout_ratio = 35 if color == Color.GREEN else 1
-            winnings = self.roulette.calculateWinnings(bet, payout_ratio)
-            self.balance += winnings
-            self.display_message(f"You won ${winnings}!", (100, 750))
-        else:
-            self.balance -= bet
-            self.display_message(f"You lost ${bet}.", (100, 750))
-        pygame.display.flip()
-        pygame.time.wait(2000)
-
-
-    def handle_bet_on_odd_even(self):
-        """Handle the bet on odd or even."""
-        bet = self.get_bet_amount()
-        odd_even = self.get_odd_even_bet()
-
-        self.spin_wheel_animation()
-        ball, color = self.roulette.spin()  # Spin the wheel
-        self.screen.fill(self.background_color)
-        self.display_balance()
-        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
-        pygame.display.flip()
-        pygame.time.wait(2000)
-
-        if self.roulette.isWinnerByOddEven(odd_even):  # Check if the user won
-            payout_ratio = 1
-            winnings = self.roulette.calculateWinnings(bet, payout_ratio)
-            self.balance += winnings
-            self.display_message(f"You won ${winnings}!", (100, 750))
-        else:
-            self.balance -= bet
-            self.display_message(f"You lost ${bet}.", (100, 750))
-        pygame.display.flip()
-        pygame.time.wait(2000)
-
-
-
-
-    # ⬆️ ⬇️ ~~~~~~~~~~~~~~~~~~ High/Low Bets ~~~~~~~~~~~~~~~~~~ ⬆️ ⬇️
-    def get_high_low_bet(self):
-        """Get the user's high/low bet, ensuring valid input."""
-        while True:
-            high_low = self.get_user_input("Enter your high/low bet (high [19-36], low [1-18]):").lower().strip()
-            if high_low in ["high", "low"]:
-                return high_low
-            else:
-                self.display_message("Invalid input. Please enter high or low.", (100, 650))
-
-    def handle_bet_on_high_low(self):   
-        """Handle the bet on high or low."""
-        bet = self.get_bet_amount()
-        high_low = self.get_high_low_bet()
-
-        self.spin_wheel_animation()
-        ball, color = self.roulette.spin()  # Spin the wheel
-        self.screen.fill(self.background_color)
-        self.display_balance()
-        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
-        pygame.display.flip()
-        pygame.time.wait(2000)
-
-        if self.roulette.isWinnerByHighLow(high_low):  # Check if the user won
-            payout_ratio = 1
-            winnings = self.roulette.calculateWinnings(bet, payout_ratio)
-            self.balance += winnings
-            self.display_message(f"You won ${winnings}!", (100, 750))
-        else:
-            self.balance -= bet
-            self.display_message(f"You lost ${bet}.", (100, 750))
-        pygame.display.flip()
-        pygame.time.wait(2000)
-
-
-
-
-
-# ****************************  Inside Bets  ****************************
 
     def handle_bet_on_street(self):
         """Handle a street bet."""
@@ -484,14 +332,14 @@ class PyGameScreen:
             if choice == "3":  # Quit the game
                 running = False
             elif choice == "1":
-                self.display_outside_bets_menu()
-                outside_choice = self.get_user_input("Enter your choice:", menu_function=self.display_outside_bets_menu)
+                self.outside.display_outside_bets_menu()
+                outside_choice = self.get_user_input("Enter your choice:", menu_function=self.outside.display_outside_bets_menu)
                 if outside_choice == "1":
-                    self.handle_bet_on_color()
+                    self.outside.handle_bet_on_color()
                 elif outside_choice == "2":
-                    self.handle_bet_on_odd_even()
+                    self.outside.handle_bet_on_odd_even()
                 elif outside_choice == "3":
-                    self.handle_bet_on_high_low()
+                    self.outside.handle_bet_on_high_low()
                 elif outside_choice == "4":
                     continue
             elif choice == "2":
