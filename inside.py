@@ -37,12 +37,15 @@ class Inside:
             bet = self.get_user_input("Enter your bet amount:")
             try:
                 bet = int(bet)  # Convert the input to an integer
-                if bet > 0:
+                if bet > 0 and bet <= self.game_screen.balance:
                     return bet
+                elif bet > self.game_screen.balance:
+                    self.display_message("Bet amount cannot exceed current balance. Please try again.", (100, 650))
                 else:
                     self.display_message("Bet amount must be a positive number. Please try again.", (100, 650))
             except ValueError:
                 self.display_message("Invalid input. Please enter a number.", (100, 650))
+
 
     def get_number_bet(self):
         """Get the user's number bet, ensuring valid input."""
