@@ -3,16 +3,16 @@ import sys
 import time
 from color import Color
 from roulette import Roulette
-
-window_size = (900, 800)
+from screen_info import ScreenInfo
 
 class PyGameScreen:
     """Class to handle the UI and user interactions using PyGame."""
 
-    def __init__(self):
+    def __init__(self, screen_info):
         """Initialize the PyGame screen and set up initial game settings."""
         pygame.init()  # Initialize all imported pygame modules
-        self.screen = pygame.display.set_mode(window_size)  # Set the display window size
+        self.screen_info = screen_info
+        self.screen = pygame.display.set_mode((self.screen_info.width, self.screen_info.height))  # Set the display window size
         pygame.display.set_caption('Roulette Game')  # Set the window caption
         self.clock = pygame.time.Clock()  # Create an object to help track time
         self.font = pygame.font.SysFont(None, 48)  # Set the font and size for rendering text
@@ -23,10 +23,10 @@ class PyGameScreen:
         self.accent_color = (255, 215, 0)  # Gold accent color
         self.result_color = (255, 255, 0)  # Yellow color for results
         self.wheel_image = pygame.image.load("wheel.png")
-        self.wheel_image = pygame.transform.scale(self.wheel_image, (400, 400))
-        self.wheel_rect = self.wheel_image.get_rect(center=(400, 400))
+        self.wheel_image = pygame.transform.scale(self.wheel_image, self.screen_info.center)
+        self.wheel_rect = self.wheel_image.get_rect(center=self.screen_info.center)
         self.banner_image = pygame.image.load("roulette.png")
-        self.banner_image = pygame.transform.scale(self.banner_image, (400, 200))
+        self.banner_image = pygame.transform.scale(self.banner_image, (self.screen_info.width // 2, 200))
         self.advanced_bets_image = pygame.image.load("roulette_table.png")
         
         # Additional attributes
@@ -258,7 +258,7 @@ class PyGameScreen:
 
     def spin_wheel_animation(self):
         """Display the spinning wheel animation."""
-        overlay = pygame.Surface(window_size)  # Create a transparent overlay
+        overlay = pygame.Surface((self.screen_info.width, self.screen_info.height))  # Create a transparent overlay
         overlay.set_alpha(255)  # Set transparency level
         overlay.fill((0, 0, 0))  # Fill the overlay with black color
         angle = 0
