@@ -1,6 +1,6 @@
 from pygame_screen import PyGameScreen
 from screen_info import ScreenInfo
-
+# Version 0.7.5
 # Initialize screen information
 screen_info = ScreenInfo(900, 900)
 
