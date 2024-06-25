@@ -1,11 +1,11 @@
-import pygame
 import sys
 import time
-from color import Color
-from roulette import Roulette
-from screen_info import ScreenInfo
-from outside import Outside
+import os
+import pygame
 from inside import Inside
+from outside import Outside
+from roulette import Roulette
+
 
 class PyGameScreen:
     """Class to handle the UI and user interactions using PyGame."""
@@ -30,7 +30,19 @@ class PyGameScreen:
         self.banner_image = pygame.image.load("roulette.png")
         self.banner_image = pygame.transform.scale(self.banner_image, (self.screen_info.width // 2, 200))
         self.advanced_bets_image = pygame.image.load("roulette_table.png")
-        
+
+        self.images = {}
+        image_folder = "gif_frames"  # Replace with your folder name
+        for filename in os.listdir(image_folder):
+            if filename.endswith((".png", ".jpg", ".jpeg", ".gif")):
+                image_path = os.path.join(image_folder, filename)
+                image_name = os.path.splitext(filename)[0]
+                self.images[image_name] = pygame.image.load(image_path).convert_alpha()
+
+        # Load game over frames
+        self.game_over_frames = [self.images[f"gif_frame{i}"] for i in
+                                 range(30)]  # Adjust the range based on your GIF frames
+
         # Initialize Outside and Inside bets handlers
         self.outside = Outside(self)
         self.inside = Inside(self)
@@ -172,6 +184,34 @@ class PyGameScreen:
         pygame.display.flip()
         pygame.time.wait(5000)
 
+    def display_game_over_gif(self):
+        """Display a GIF animation on the game over screen."""
+        self.screen.fill(self.background_color)
+        self.display_message("Game over! You have no money left.", (400, 400), self.result_color)
+
+        frame_duration = 100  # Milliseconds between frames
+        start_time = pygame.time.get_ticks()
+
+        running = True
+        while running:
+            current_time = pygame.time.get_ticks()
+            frame_index = (current_time - start_time) // frame_duration % len(self.game_over_frames)
+
+            self.screen.blit(self.game_over_frames[frame_index], (450, 450))  # Adjust position as needed
+
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                    running = False
+
+            if current_time - start_time > 6000:  # Display for 6 seconds
+                running = False
+
+        pygame.time.wait(1000)  # Wait for 1 second after animation ends
+
     def main_loop(self):
         """Main game loop to handle game logic and user interactions."""
         self.display_welcome()  # Display the welcome screen
@@ -180,10 +220,9 @@ class PyGameScreen:
         while running:
             if self.balance <= 0:
                 running = False
-                self.display_message("Game over! You have no money left.", (100, 800))
-                pygame.display.flip()
-                pygame.time.wait(3000)
+                self.display_game_over_gif()  # Call game over screen method here
                 break
+                self.display_message("Game over! You have no money left.", (100, 800))
 
             self.display_menu()  # Display the menu
             self.display_balance()  # Ensure balance is displayed in the main loop
