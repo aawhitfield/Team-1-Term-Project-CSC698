@@ -146,8 +146,8 @@ class Inside:
             payout_ratio = 35
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.game_screen.balance += winnings
-            self.display_message(f"You won ${winnings}!", (100, 750))
             self.display_winning_gif()
+            self.display_message(f"You won ${winnings}!", (100, 750))
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
@@ -170,8 +170,8 @@ class Inside:
             payout_ratio = 11
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.game_screen.balance += winnings
-            self.display_message(f"You won ${winnings}!", (100, 750))
             self.display_winning_gif()
+            self.display_message(f"You won ${winnings}!", (100, 750))
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
@@ -194,8 +194,8 @@ class Inside:
             payout_ratio = 5
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.game_screen.balance += winnings
-            self.display_message(f"You won ${winnings}!", (100, 750))
             self.display_winning_gif()
+            self.display_message(f"You won ${winnings}!", (100, 750))
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
