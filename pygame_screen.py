@@ -40,7 +40,7 @@ class PyGameScreen:
                 self.images[image_name] = pygame.image.load(image_path).convert_alpha()
 
         # Load game over frames
-        self.game_over_frames = [self.images[f"gif_frame{i}"] for i in
+        self.game_over_frames = [self.images[f"gif_frame{i+1}"] for i in
                                  range(30)]  # Adjust the range based on your GIF frames
 
         # Initialize Outside and Inside bets handlers
@@ -187,7 +187,7 @@ class PyGameScreen:
     def display_game_over_gif(self):
         """Display a GIF animation on the game over screen."""
         self.screen.fill(self.background_color)
-        self.display_message("Game over! You have no money left.", (400, 400), self.result_color)
+        self.display_message("Game over! You have no money left.", (100, 300), self.result_color)
 
         frame_duration = 100  # Milliseconds between frames
         start_time = pygame.time.get_ticks()
@@ -197,7 +197,7 @@ class PyGameScreen:
             current_time = pygame.time.get_ticks()
             frame_index = (current_time - start_time) // frame_duration % len(self.game_over_frames)
 
-            self.screen.blit(self.game_over_frames[frame_index], (450, 450))  # Adjust position as needed
+            self.screen.blit(self.game_over_frames[frame_index], (200, 400))  # Adjust position as needed
 
             pygame.display.flip()
 
@@ -207,7 +207,7 @@ class PyGameScreen:
                 elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                     running = False
 
-            if current_time - start_time > 6000:  # Display for 6 seconds
+            if current_time - start_time > 3000:  # Display for 3 seconds
                 running = False
 
         pygame.time.wait(1000)  # Wait for 1 second after animation ends
