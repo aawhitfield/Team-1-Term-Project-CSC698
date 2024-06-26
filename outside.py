@@ -1,6 +1,7 @@
 import pygame
 import sys
 import time
+import os
 from color import Color
 
 class Outside:
@@ -18,6 +19,18 @@ class Outside:
         self.display_message = game_screen.display_message
         self.get_user_input = game_screen.get_user_input
         self.game_screen = game_screen
+
+        self.frames = {}
+        frame_folder = "seinfeld_gif"  # Replace with your folder name
+        for filename in os.listdir(frame_folder):
+            if filename.endswith((".png", ".jpg", ".jpeg", ".gif")):
+                frame_path = os.path.join(frame_folder, filename)
+                frame_name = os.path.splitext(filename)[0]
+                self.frames[frame_name] = pygame.image.load(frame_path).convert_alpha()
+
+        # Load celebration frames
+        self.celebration_frames = [self.frames[f"seinfeld_frame{i + 1}"] for i in
+                                   range(30)]  # Adjust the range based on your GIF frames
 
     def display_outside_bets_menu(self):
         """Display the outside bets menu."""
@@ -138,8 +151,36 @@ class Outside:
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.game_screen.balance += winnings
             self.display_message(f"You won ${winnings}!", (100, 750))
+            self.display_winning_gif()
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
         pygame.display.flip()
         pygame.time.wait(2000)
+
+    def display_winning_gif(self):
+        """Display a GIF animation on the winning screen."""
+        self.screen.fill(self.background_color)
+
+        frame_duration = 100  # Milliseconds between frames
+        start_time = pygame.time.get_ticks()
+
+        running = True
+        while running:
+            current_time = pygame.time.get_ticks()
+            frame_index = (current_time - start_time) // frame_duration % len(self.celebration_frames)
+
+            self.screen.blit(self.celebration_frames[frame_index], (200, 400))  # Adjust position as needed
+
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                    running = False
+
+            if current_time - start_time > 2900:  # Display for 3 seconds
+                running = False
+
+        pygame.time.wait(0)
