@@ -86,8 +86,8 @@ class Outside:
             payout_ratio = 35 if color == Color.GREEN else 1
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.game_screen.balance += winnings
-            self.display_message(f"You won ${winnings}!", (100, 750))
             self.display_winning_gif()
+            self.display_message(f"You won ${winnings}!", (100, 750))
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
@@ -119,8 +119,8 @@ class Outside:
             payout_ratio = 1
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.game_screen.balance += winnings
-            self.display_message(f"You won ${winnings}!", (100, 750))
             self.display_winning_gif()
+            self.display_message(f"You won ${winnings}!", (100, 750))
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
@@ -152,8 +152,8 @@ class Outside:
             payout_ratio = 1
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.game_screen.balance += winnings
-            self.display_message(f"You won ${winnings}!", (100, 750))
             self.display_winning_gif()
+            self.display_message(f"You won ${winnings}!", (100, 750))
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
