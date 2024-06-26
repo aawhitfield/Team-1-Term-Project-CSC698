@@ -85,7 +85,7 @@ class Inside:
     def get_street_bet(self):
         """Get the user's street bet, ensuring valid input."""
         while True:
-            bet_choice = input("Choose a row or 'street' of numbers (e.g., '1,2,3'): ")
+            bet_choice = self.get_user_input("Choose a row or 'street' of numbers (e.g., '1,2,3'): ")
             street = [int(num) for num in bet_choice.split(",")]
             if self.is_valid_street(street):
                 return tuple(street)
@@ -102,7 +102,7 @@ class Inside:
     def get_sixline_bet(self):
         """Get the user's sixline bet, ensuring valid input."""
         while True:
-            bet_choice = input("Choose a sixline of numbers (e.g., '1,2,3,4,5,6'): ")
+            bet_choice = self.get_user_input("Choose a sixline of numbers (e.g., '1,2,3,4,5,6'): ")
             sixline = [int(num) for num in bet_choice.split(",")]
             if self.is_valid_sixline(sixline):
                 return tuple(sixline)
