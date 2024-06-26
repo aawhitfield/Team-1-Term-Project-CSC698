@@ -207,10 +207,10 @@ class PyGameScreen:
                 elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                     running = False
 
-            if current_time - start_time > 3000:  # Display for 3 seconds
+            if current_time - start_time > 2900:  # Display for 3 seconds
                 running = False
 
-        pygame.time.wait(1000)  # Wait for 1 second after animation ends
+        pygame.time.wait(0)  # Wait for 0 seconds after animation ends
 
     def main_loop(self):
         """Main game loop to handle game logic and user interactions."""
