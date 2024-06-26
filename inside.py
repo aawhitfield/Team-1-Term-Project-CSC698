@@ -1,4 +1,5 @@
 import pygame
+import os
 import sys
 
 class Inside:
@@ -16,6 +17,19 @@ class Inside:
         self.display_message = game_screen.display_message
         self.get_user_input = game_screen.get_user_input
         self.game_screen = game_screen
+
+        self.frames = {}
+        frame_folder = "seinfeld_gif"  # Replace with your folder name
+        for filename in os.listdir(frame_folder):
+            if filename.endswith((".png", ".jpg", ".jpeg", ".gif")):
+                frame_path = os.path.join(frame_folder, filename)
+                frame_name = os.path.splitext(filename)[0]
+                self.frames[frame_name] = pygame.image.load(frame_path).convert_alpha()
+
+        # Load celebration frames
+        self.celebration_frames = [self.frames[f"seinfeld_frame{i + 1}"] for i in
+                                   range(30)]  # Adjust the range based on your GIF frames
+
 
     def display_inside_bets_menu(self):
         """Display the inside bets menu."""
