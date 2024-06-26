@@ -212,6 +212,34 @@ class PyGameScreen:
 
         pygame.time.wait(0)  # Wait for 0 seconds after animation ends
 
+    def display_winning_gifs(self):
+        """Display a GIF animation on the winning screen."""
+        self.screen.fill(self.background_color)
+
+        frame_duration = 100  # Milliseconds between frames
+        start_time = pygame.time.get_ticks()
+
+        running = True
+        while running:
+            current_time = pygame.time.get_ticks()
+            frame_index = (current_time - start_time) // frame_duration % len(self.game_over_frames)
+
+            self.screen.blit(self.game_over_frames[frame_index], (200, 400))  # Adjust position as needed
+
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                    running = False
+
+            if current_time - start_time > 2900:  # Display for 3 seconds
+                running = False
+
+        pygame.time.wait(0)
+
+
     def main_loop(self):
         """Main game loop to handle game logic and user interactions."""
         self.display_welcome()  # Display the welcome screen
