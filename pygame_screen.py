@@ -43,6 +43,18 @@ class PyGameScreen:
         self.game_over_frames = [self.images[f"gif_frame{i+1}"] for i in
                                  range(30)]  # Adjust the range based on your GIF frames
 
+        self.frames = {}
+        frame_folder = "seinfeld_gif"  # Replace with your folder name
+        for filename in os.listdir(frame_folder):
+            if filename.endswith((".png", ".jpg", ".jpeg", ".gif")):
+                frame_path = os.path.join(frame_folder, filename)
+                frame_name = os.path.splitext(filename)[0]
+                self.frames[frame_name] = pygame.image.load(frame_path).convert_alpha()
+
+        # Load game over frames
+        self.celebration_frames = [self.frames[f"seinfeld_frame{i+1}"] for i in
+                                   range(30)]  # Adjust the range based on your GIF frames
+
         # Initialize Outside and Inside bets handlers
         self.outside = Outside(self)
         self.inside = Inside(self)
@@ -212,7 +224,7 @@ class PyGameScreen:
 
         pygame.time.wait(0)  # Wait for 0 seconds after animation ends
 
-    def display_winning_gifs(self):
+    def display_winning_gif(self):
         """Display a GIF animation on the winning screen."""
         self.screen.fill(self.background_color)
 
@@ -222,9 +234,9 @@ class PyGameScreen:
         running = True
         while running:
             current_time = pygame.time.get_ticks()
-            frame_index = (current_time - start_time) // frame_duration % len(self.game_over_frames)
+            frame_index = (current_time - start_time) // frame_duration % len(self.celebration_frames)
 
-            self.screen.blit(self.game_over_frames[frame_index], (200, 400))  # Adjust position as needed
+            self.screen.blit(self.celebration_frames[frame_index], (200, 400))  # Adjust position as needed
 
             pygame.display.flip()
 
