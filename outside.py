@@ -87,6 +87,7 @@ class Outside:
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.game_screen.balance += winnings
             self.display_message(f"You won ${winnings}!", (100, 750))
+            self.display_winning_gif()
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
@@ -119,6 +120,7 @@ class Outside:
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.game_screen.balance += winnings
             self.display_message(f"You won ${winnings}!", (100, 750))
+            self.display_winning_gif()
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
