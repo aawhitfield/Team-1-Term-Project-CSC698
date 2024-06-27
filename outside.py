@@ -172,7 +172,7 @@ class Outside:
             current_time = pygame.time.get_ticks()
             frame_index = (current_time - start_time) // frame_duration % len(self.celebration_frames)
 
-            self.screen.blit(self.celebration_frames[frame_index], (200, 400))  # Adjust position as needed
+            self.screen.blit(self.celebration_frames[frame_index], (300, 300))  # Adjust position as needed
 
             pygame.display.flip()
 
