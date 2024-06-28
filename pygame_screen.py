@@ -148,7 +148,7 @@ class PyGameScreen:
             input_box.w = width  # Update the input box width
             self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))  # Draw the text on the screen
             pygame.draw.rect(self.screen, color, input_box, 2)  # Draw the input box
-            roulette_board = pygame.image.load("Roulette_Board.png")
+            roulette_board = pygame.image.load("roulette_gameboard.png")
             roulette_board = pygame.transform.scale(roulette_board, (250, 500))
             self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
             pygame.display.flip()  # Update the full display Surface to the screen
