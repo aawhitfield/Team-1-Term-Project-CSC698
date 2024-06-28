@@ -29,7 +29,7 @@ class PyGameScreen:
         self.wheel_rect = self.wheel_image.get_rect(center=self.screen_info.center)
         self.banner_image = pygame.image.load("roulette.png")
         self.banner_image = pygame.transform.scale(self.banner_image, (self.screen_info.width // 2, 200))
-        self.advanced_bets_image = pygame.image.load("roulette_table.png")
+        self.advanced_bets_image = pygame.image.load("roulette_gameboard.png")
 
         self.images = {}
         image_folder = "gif_frames"  # Replace with your folder name
@@ -250,8 +250,10 @@ class PyGameScreen:
                 elif inside_choice == "2":
                     self.inside.handle_bet_on_street()
                 elif inside_choice == "3":
-                    self.inside.handle_bet_on_sixline()
+                    self.inside.handle_bet_on_corner()
                 elif inside_choice == "4":
+                    self.inside.handle_bet_on_sixline()
+                elif inside_choice == "5":
                     continue
 
         pygame.quit()  # Quit pygame

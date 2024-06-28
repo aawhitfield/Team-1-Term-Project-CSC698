@@ -38,8 +38,9 @@ class Inside:
         self.display_message('Inside Bets', (100, 100), self.accent_color)
         self.display_message('1. Bet on a number', (100, 200))
         self.display_message('2. Street Bet', (100, 300))
-        self.display_message('3. Sixline', (100, 400))
-        self.display_message('4. Return to main menu', (100, 500))
+        self.display_message('3. Corner Bet', (100, 400))
+        self.display_message('3. Sixline Bet', (100, 500))
+        self.display_message('4. Return to main menu', (100, 600))
         roulette_board = pygame.image.load("roulette_gameboard.png")
         roulette_board = pygame.transform.scale(roulette_board, (250, 500))
         self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
@@ -86,6 +87,16 @@ class Inside:
             valid_streets.append(street)
         return valid_streets
 
+    def generate_valid_corners(self):
+        """Generate a list of valid corners."""
+        valid_corners = []
+        for i in range(1, 32):
+            if i % 2 == 2:
+                continue
+            corner = (i, i + 1, i + 3, i + 4)
+            valid_corners.append(corner)
+        return valid_corners
+
     def generate_valid_sixlines(self):
         """Generate a list of valid sixline bets."""
         valid_sixlines = []
@@ -112,6 +123,22 @@ class Inside:
         A valid street bet consists of three consecutive numbers on the roulette wheel.
         """
         return tuple(sorted(street)) in self.generate_valid_streets()
+
+    def get_corner_bet(self):
+        """Get the user's corners bet, ensuring valid input."""
+        while True:
+            bet_choice = self.get_user_input("Choose a corner bet (e.g., ;'1,2,4,5'): ")
+            corner = [int(num) for num in bet_choice.split(",")]
+            if self.is_valid_corner(corner):
+                return tuple(corner)
+            else:
+                print("Invalid input. Please enter a valid corner bet (e.g., ;'1,2,4,5'): ")
+
+    def is_valid_corner(self, corner):
+        """
+        Checks if the given corner bet is a valid corner bet.
+        """
+        return tuple(sorted(corner)) in self.generate_valid_corners()
 
     def get_sixline_bet(self):
         """Get the user's sixline bet, ensuring valid input."""
@@ -168,6 +195,30 @@ class Inside:
 
         if self.roulette.isWinnerByStreet(street):  # Check if the user won
             payout_ratio = 11
+            winnings = self.roulette.calculateWinnings(bet, payout_ratio)
+            self.game_screen.balance += winnings
+            self.display_winning_gif()
+            self.display_message(f"You won ${winnings}!", (100, 750))
+        else:
+            self.game_screen.balance -= bet
+            self.display_message(f"You lost ${bet}.", (100, 750))
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
+    def handle_bet_on_corner(self):
+        """Handle a corner bet."""
+        bet = self.get_bet_amount()
+        corner = self.get_corner_bet()
+
+        self.spin_wheel_animation()
+        ball, color = self.roulette.spin()  # Spin the wheel
+        self.screen.fill(self.background_color)
+        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
+        if self.roulette.isWinnerByCorner(corner): # Check if the user won
+            payout_ratio = 8
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.game_screen.balance += winnings
             self.display_winning_gif()
