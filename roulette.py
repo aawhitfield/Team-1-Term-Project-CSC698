@@ -81,3 +81,15 @@ class Roulette:
     # calculate the amount of money the user has won
     def calculateWinnings(self, bet, payout_ratio):
         return bet * payout_ratio
+    
+    def isWinnerByColumn(self, column):
+        if self.ball == 0 or self.ball == 37:
+            return False  # 0 and 00 are not part of any column
+
+        if column == 1:
+            return self.ball in [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]
+        elif column == 2:
+            return self.ball in [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35]
+        elif column == 3:
+            return self.ball in [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36]
+

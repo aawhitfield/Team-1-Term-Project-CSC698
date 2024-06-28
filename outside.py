@@ -40,11 +40,14 @@ class Outside:
         self.display_message('1. Bet on a color', (100, 200))
         self.display_message('2. Bet on odd or even', (100, 300))
         self.display_message('3. Bet on high/low', (100, 400))
-        self.display_message('4. Return to main menu', (100, 500))
+        self.display_message('4. Bet on column', (100, 500))
+        self.display_message('5. Return to main menu', (100, 600))
         roulette_board = pygame.image.load("roulette_gameboard.png")
         roulette_board = pygame.transform.scale(roulette_board, (250, 500))
         self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
         pygame.display.flip()  # Update the full display Surface to the screen
+
+
 
     def get_bet_amount(self):
         """Get the bet amount from the user, ensuring valid input."""
@@ -186,3 +189,37 @@ class Outside:
                 running = False
 
         pygame.time.wait(0)
+
+
+    # ****************** Column Bets ******************
+    def get_column_bet(self):
+        """Get the user's column bet, ensuring valid input."""
+        while True:
+            column = self.get_user_input("Enter your column bet (1, 2, 3):").strip()
+            if column in ["1", "2", "3"]:
+                return int(column)
+            else:
+                self.display_message("Invalid input. Please enter 1, 2, or 3.", (100, 650))
+
+    def handle_bet_on_column(self):
+        """Handle the bet on a column."""
+        bet = self.get_bet_amount()
+        column = self.get_column_bet()
+
+        self.spin_wheel_animation()
+        ball, color = self.roulette.spin()  # Spin the wheel
+        self.screen.fill(self.background_color)
+        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
+        if self.roulette.isWinnerByColumn(column):  # Check if the user won
+            payout_ratio = 2
+            winnings = self.roulette.calculateWinnings(bet, payout_ratio)
+            self.game_screen.balance += winnings
+            self.display_message(f"You won ${winnings}!", (100, 750))
+        else:
+            self.game_screen.balance -= bet
+            self.display_message(f"You lost ${bet}.", (100, 750))
+        pygame.display.flip()
+        pygame.time.wait(2000)

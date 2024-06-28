@@ -142,7 +142,7 @@ class PyGameScreen:
             self.display_balance()
             if menu_function:
                 menu_function()  # Call the appropriate menu function
-            self.display_message(prompt, (100, 600))  # Display the prompt
+            self.display_message(prompt, (100, 700))  # Adjust the y-coordinate to avoid overlapping
             txt_surface = self.font.render(text, True, color)  # Render the text entered by the user
             width = max(200, txt_surface.get_width() + 10)  # Set the width of the input box
             input_box.w = width  # Update the input box width
@@ -222,7 +222,6 @@ class PyGameScreen:
                 running = False
                 self.display_game_over_gif()  # Call game over screen method here
                 break
-                self.display_message("Game over! You have no money left.", (100, 800))
 
             self.display_menu()  # Display the menu
             self.display_balance()  # Ensure balance is displayed in the main loop
@@ -240,6 +239,8 @@ class PyGameScreen:
                 elif outside_choice == "3":
                     self.outside.handle_bet_on_high_low()
                 elif outside_choice == "4":
+                    self.outside.handle_bet_on_column()
+                elif outside_choice == "5":
                     continue
             elif choice == "2":
                 self.inside.display_inside_bets_menu()
