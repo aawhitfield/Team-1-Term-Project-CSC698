@@ -249,8 +249,10 @@ class PyGameScreen:
                 elif inside_choice == "2":
                     self.inside.handle_bet_on_street()
                 elif inside_choice == "3":
-                    self.inside.handle_bet_on_sixline()
+                    self.inside.handle_bet_on_corner()
                 elif inside_choice == "4":
+                    self.inside.handle_bet_on_sixline()
+                elif inside_choice == "5":
                     continue
 
         pygame.quit()  # Quit pygame
