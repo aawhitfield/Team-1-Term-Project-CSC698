@@ -94,7 +94,7 @@ class PyGameScreen:
         self.display_message('1. Outside Bets', (100, 200))
         self.display_message('2. Inside Bets', (100, 300))
         self.display_message('3. Quit', (100, 400))
-        roulette_board = pygame.image.load("Roulette_Board.png")
+        roulette_board = pygame.image.load("roulette_gameboard.png")
         roulette_board = pygame.transform.scale(roulette_board, (250, 500))
         self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
 

@@ -40,7 +40,7 @@ class Inside:
         self.display_message('2. Street Bet', (100, 300))
         self.display_message('3. Sixline', (100, 400))
         self.display_message('4. Return to main menu', (100, 500))
-        roulette_board = pygame.image.load("Roulette_Board.png")
+        roulette_board = pygame.image.load("roulette_gameboard.png")
         roulette_board = pygame.transform.scale(roulette_board, (250, 500))
         self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
         pygame.display.flip()  # Update the full display Surface to the screen
