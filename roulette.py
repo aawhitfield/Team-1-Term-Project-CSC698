@@ -71,6 +71,13 @@ class Roulette:
         # Check if the ball number is in the street bet
         return self.ball in street
 
+    def isWinnerByCorner(self, corner):
+        if self.ball == 0 or self.ball == 37:
+            return False  # 0 and 00 are not part of any corner
+
+        # Check if the ball number is in the corner bet
+        return self.ball in corner
+
     def isWinnerBySixline(self, sixline):
         if self.ball == 0 or self.ball == 37:
             return False  # 0 and 00 are not part of any sixline
