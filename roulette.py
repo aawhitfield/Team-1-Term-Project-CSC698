@@ -63,7 +63,6 @@ class Roulette:
         elif high_low == "low":
             return 1 <= self.ball <= 18
 
-
     def isWinnerByStreet(self, street):
         if self.ball == 0 or self.ball == 37:
             return False  # 0 and 00 are not part of any street
