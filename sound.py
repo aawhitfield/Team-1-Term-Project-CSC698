@@ -8,6 +8,7 @@ class Sound:
         self.spinning_sound = pygame.mixer.Sound("audio/spinning.mp3")
         self.coins_sound = pygame.mixer.Sound("audio/coins.mp3")
         self.failure_sound = pygame.mixer.Sound("audio/failure.mp3")
+        self.game_over_sound = pygame.mixer.Sound("audio/game_over.mp3")
 
     def play_spinning_sound(self):
         """Play the spinning sound effect."""
@@ -30,3 +31,11 @@ class Sound:
     def stop_losing_sound(self):
         """Stop the failure sound effect."""
         self.failure_sound.stop()
+
+    def play_game_over_sound(self):
+        """Play the game over sound effect."""
+        self.game_over_sound.play()
+
+    def stop_game_over_sound(self):
+        """Stop the game over sound effect."""
+        self.game_over_sound.stop()

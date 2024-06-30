@@ -199,6 +199,9 @@ class PyGameScreen:
         self.screen.fill(self.background_color)
         self.display_message("Game over! You have no money left.", (100, 300), self.result_color)
 
+        # Play the game over sound
+        self.sound.play_game_over_sound()
+
         frame_duration = 100  # Milliseconds between frames
         start_time = pygame.time.get_ticks()
 
@@ -220,6 +223,7 @@ class PyGameScreen:
             if current_time - start_time > 2900:  # Display for 3 seconds
                 running = False
 
+        self.sound.stop_game_over_sound()  # Stop the sound after the animation
         pygame.time.wait(0)  # Wait for 0 seconds after animation ends
 
     def main_loop(self):
