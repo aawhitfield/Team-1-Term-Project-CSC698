@@ -163,6 +163,11 @@ class PyGameScreen:
         overlay.fill((0, 0, 0))  # Fill the overlay with black color
         angle = 0
 
+        # Load and play sound
+        pygame.mixer.init()
+        spinning_sound = pygame.mixer.Sound("audio/spinning.mp3")
+        spinning_sound.play()
+
         start_time = time.time()
         while time.time() - start_time < 2:  # Rotate for 2 seconds
             self.screen.fill(self.background_color)
@@ -176,6 +181,9 @@ class PyGameScreen:
             self.screen.blit(rotated_image, new_rect.topleft)
             pygame.display.flip()
             self.clock.tick(30)
+
+        spinning_sound.stop()  # Stop the sound after the animation
+
 
     def show_advanced_bets(self):
         """Display the advanced bets image for 5 seconds and then return to menu."""
