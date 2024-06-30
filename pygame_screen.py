@@ -5,6 +5,7 @@ import pygame
 from inside import Inside
 from outside import Outside
 from roulette import Roulette
+from sound import Sound
 
 
 class PyGameScreen:
@@ -46,6 +47,9 @@ class PyGameScreen:
         # Initialize Outside and Inside bets handlers
         self.outside = Outside(self)
         self.inside = Inside(self)
+
+        # Initialize sound effects
+        self.sound = Sound()
 
     def display_message(self, message, pos, color=None):
         """Render and display a message on the screen.
@@ -164,9 +168,7 @@ class PyGameScreen:
         angle = 0
 
         # Load and play sound
-        pygame.mixer.init()
-        spinning_sound = pygame.mixer.Sound("audio/spinning.mp3")
-        spinning_sound.play()
+        self.sound.play_spinning_sound()
 
         start_time = time.time()
         while time.time() - start_time < 2:  # Rotate for 2 seconds
@@ -182,7 +184,7 @@ class PyGameScreen:
             pygame.display.flip()
             self.clock.tick(30)
 
-        spinning_sound.stop()  # Stop the sound after the animation
+        self.sound.stop_spinning_sound()  # Stop the sound after the animation
 
 
     def show_advanced_bets(self):
