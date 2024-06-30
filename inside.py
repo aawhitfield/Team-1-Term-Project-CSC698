@@ -175,11 +175,18 @@ class Inside:
             self.game_screen.balance += winnings
             self.display_winning_gif()
             self.display_message(f"You won ${winnings}!", (100, 750))
+            
+            # Play the coins sound
+            self.game_screen.sound.play_coins_sound()
+            pygame.time.wait(2000)
+            self.game_screen.sound.stop_coins_sound()
+            
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
-        pygame.display.flip()
-        pygame.time.wait(2000)
+            pygame.display.flip()
+            pygame.time.wait(2000)
+
 
     def handle_bet_on_street(self):
         """Handle a street bet."""
@@ -199,6 +206,12 @@ class Inside:
             self.game_screen.balance += winnings
             self.display_winning_gif()
             self.display_message(f"You won ${winnings}!", (100, 750))
+            
+            # Play the winning sound
+            self.game_screen.sound.play_coins_sound()
+            pygame.time.wait(2000)
+            self.game_screen.sound.stop_coins_sound()
+            
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
@@ -217,12 +230,18 @@ class Inside:
         pygame.display.flip()
         pygame.time.wait(2000)
 
-        if self.roulette.isWinnerByCorner(corner): # Check if the user won
+        if self.roulette.isWinnerByCorner(corner):  # Check if the user won
             payout_ratio = 8
             winnings = self.roulette.calculateWinnings(bet, payout_ratio)
             self.game_screen.balance += winnings
             self.display_winning_gif()
             self.display_message(f"You won ${winnings}!", (100, 750))
+            
+            # Play the winning sound
+            self.game_screen.sound.play_coins_sound()
+            pygame.time.wait(2000)
+            self.game_screen.sound.stop_coins_sound()
+            
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
@@ -247,6 +266,12 @@ class Inside:
             self.game_screen.balance += winnings
             self.display_winning_gif()
             self.display_message(f"You won ${winnings}!", (100, 750))
+            
+            # Play the winning sound
+            self.game_screen.sound.play_coins_sound()
+            pygame.time.wait(2000)
+            self.game_screen.sound.stop_coins_sound()
+            
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))

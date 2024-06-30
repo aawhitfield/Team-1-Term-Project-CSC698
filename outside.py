@@ -91,11 +91,18 @@ class Outside:
             self.game_screen.balance += winnings
             self.display_winning_gif()
             self.display_message(f"You won ${winnings}!", (100, 750))
+            
+            # Play the winning sound
+            self.game_screen.sound.play_coins_sound()
+            pygame.time.wait(2000)
+            self.game_screen.sound.stop_coins_sound()
+            
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
         pygame.display.flip()
         pygame.time.wait(2000)
+
 
     def get_odd_even_bet(self):
         """Get the user's odd/even bet, ensuring valid input."""
@@ -124,11 +131,18 @@ class Outside:
             self.game_screen.balance += winnings
             self.display_winning_gif()
             self.display_message(f"You won ${winnings}!", (100, 750))
+            
+            # Play the winning sound
+            self.game_screen.sound.play_coins_sound()
+            pygame.time.wait(2000)
+            self.game_screen.sound.stop_coins_sound()
+            
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
         pygame.display.flip()
         pygame.time.wait(2000)
+
 
     def get_high_low_bet(self):
         """Get the user's high/low bet, ensuring valid input."""
@@ -157,11 +171,18 @@ class Outside:
             self.game_screen.balance += winnings
             self.display_winning_gif()
             self.display_message(f"You won ${winnings}!", (100, 750))
+            
+            # Play the winning sound
+            self.game_screen.sound.play_coins_sound()
+            pygame.time.wait(2000)
+            self.game_screen.sound.stop_coins_sound()
+            
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
         pygame.display.flip()
         pygame.time.wait(2000)
+
 
     def display_winning_gif(self):
         """Display a GIF animation on the winning screen."""
@@ -219,6 +240,12 @@ class Outside:
             self.game_screen.balance += winnings
             self.display_winning_gif()
             self.display_message(f"You won ${winnings}!", (100, 750))
+            
+            # Play the winning sound
+            self.game_screen.sound.play_coins_sound()
+            pygame.time.wait(2000)
+            self.game_screen.sound.stop_coins_sound()
+            
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
