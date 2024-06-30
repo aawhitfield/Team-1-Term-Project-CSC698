@@ -93,13 +93,16 @@ class Outside:
             self.display_message(f"You won ${winnings}!", (100, 750))
             
             # Play the winning sound
-            self.game_screen.sound.play_coins_sound()
+            self.game_screen.sound.play_winning_sound()
             pygame.time.wait(2000)
-            self.game_screen.sound.stop_coins_sound()
+            self.game_screen.sound.stop_winning_sound()
             
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
+            self.game_screen.sound.play_losing_sound()
+            pygame.time.wait(1500)
+            self.game_screen.sound.stop_losing_sound()
         pygame.display.flip()
         pygame.time.wait(2000)
 
@@ -133,13 +136,16 @@ class Outside:
             self.display_message(f"You won ${winnings}!", (100, 750))
             
             # Play the winning sound
-            self.game_screen.sound.play_coins_sound()
+            self.game_screen.sound.play_winning_sound()
             pygame.time.wait(2000)
-            self.game_screen.sound.stop_coins_sound()
+            self.game_screen.sound.stop_winning_sound()
             
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
+            self.game_screen.sound.play_losing_sound()
+            pygame.time.wait(1500)
+            self.game_screen.sound.stop_losing_sound()
         pygame.display.flip()
         pygame.time.wait(2000)
 
@@ -173,13 +179,16 @@ class Outside:
             self.display_message(f"You won ${winnings}!", (100, 750))
             
             # Play the winning sound
-            self.game_screen.sound.play_coins_sound()
+            self.game_screen.sound.play_winning_sound()
             pygame.time.wait(2000)
-            self.game_screen.sound.stop_coins_sound()
+            self.game_screen.sound.stop_winning_sound()
             
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
+            self.game_screen.sound.play_losing_sound()
+            pygame.time.wait(1500)
+            self.game_screen.sound.stop_losing_sound()
         pygame.display.flip()
         pygame.time.wait(2000)
 
@@ -242,12 +251,15 @@ class Outside:
             self.display_message(f"You won ${winnings}!", (100, 750))
             
             # Play the winning sound
-            self.game_screen.sound.play_coins_sound()
+            self.game_screen.sound.play_winning_sound()
             pygame.time.wait(2000)
-            self.game_screen.sound.stop_coins_sound()
+            self.game_screen.sound.stop_winning_sound()
             
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
+            self.game_screen.sound.play_losing_sound()
+            pygame.time.wait(1500)
+            self.game_screen.sound.stop_losing_sound()
         pygame.display.flip()
         pygame.time.wait(2000)
