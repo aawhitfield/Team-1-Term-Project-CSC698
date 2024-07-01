@@ -176,11 +176,6 @@ class Inside:
             self.display_winning_gif()
             self.display_message(f"You won ${winnings}!", (100, 750))
             
-            # Play the coins sound
-            self.game_screen.sound.play_winning_sound()
-            pygame.time.wait(2000)
-            self.game_screen.sound.stop_winning_sound()
-            
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
@@ -210,11 +205,6 @@ class Inside:
             self.display_winning_gif()
             self.display_message(f"You won ${winnings}!", (100, 750))
             
-            # Play the winning sound
-            self.game_screen.sound.play_winning_sound()
-            pygame.time.wait(2000)
-            self.game_screen.sound.stop_winning_sound()
-            
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
@@ -242,11 +232,6 @@ class Inside:
             self.game_screen.balance += winnings
             self.display_winning_gif()
             self.display_message(f"You won ${winnings}!", (100, 750))
-            
-            # Play the winning sound
-            self.game_screen.sound.play_winning_sound()
-            pygame.time.wait(2000)
-            self.game_screen.sound.stop_winning_sound()
             
         else:
             self.game_screen.balance -= bet
@@ -276,11 +261,6 @@ class Inside:
             self.display_winning_gif()
             self.display_message(f"You won ${winnings}!", (100, 750))
             
-            # Play the winning sound
-            self.game_screen.sound.play_winning_sound()
-            pygame.time.wait(2000)
-            self.game_screen.sound.stop_winning_sound()
-            
         else:
             self.game_screen.balance -= bet
             self.display_message(f"You lost ${bet}.", (100, 750))
@@ -293,6 +273,9 @@ class Inside:
     def display_winning_gif(self):
         """Display a GIF animation on the winning screen."""
         self.screen.fill(self.background_color)
+        
+        # Play the winning sound
+        self.game_screen.sound.play_winning_sound()
 
         frame_duration = 100  # Milliseconds between frames
         start_time = pygame.time.get_ticks()
@@ -315,4 +298,5 @@ class Inside:
             if current_time - start_time > 2900:  # Display for 3 seconds
                 running = False
 
+        self.game_screen.sound.stop_winning_sound()  # Stop the sound after the animation
         pygame.time.wait(0)
