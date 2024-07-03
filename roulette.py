@@ -12,17 +12,22 @@ class Roulette:
         self.balance = 100
 
     def assign_colors(self):
-        # Assign colors to pockets
+        # Assign colors to pockets based on the provided roulette board image
         colors = {}
-        for i in range(1, 37):
-            if i % 2 == 0:
-                colors[i] = Color.BLACK # Even numbers are black
-            else:
-                colors[i] = Color.RED  # Odd numbers are red
-        colors[0] = Color.GREEN  # Assigning green to zero
-        colors[37] = Color.GREEN # Assigning green to double zero (37 will be used to represent 00)
-        return colors
+        red_numbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
+        black_numbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35]
 
+        for i in range(1, 37):
+            if i in red_numbers:
+                colors[i] = Color.RED  # Red numbers
+            elif i in black_numbers:
+                colors[i] = Color.BLACK  # Black numbers
+            else:
+                colors[i] = Color.GREEN  # Defaulting to green for any anomalies
+
+        colors[0] = Color.GREEN  # Assigning green to zero
+        colors[37] = Color.GREEN  # Assigning green to double zero (37 will be used to represent 00)
+        return colors
     def spin(self):
         self.ball = random.choice(self.pockets)
         color = self.colors.get(self.ball, Color.GREEN)  # Default color if not found
@@ -49,6 +54,61 @@ class Roulette:
         elif odd_or_even == "even":
             return self.ball % 2 == 0 # if the number is divisible by 2, it's even
         
+    # Add this new method to the Roulette class
+    def isWinnerByHighLow(self, high_low):
+        if self.ball == 0 or self.ball == 37:
+            return False  # 0 and 00 are neither high nor low in roulette
+        if high_low == "high":
+            return 19 <= self.ball <= 36
+        elif high_low == "low":
+            return 1 <= self.ball <= 18
+
+    def isWinnerByStreet(self, street):
+        if self.ball == 0 or self.ball == 37:
+            return False  # 0 and 00 are not part of any street
+
+        # Check if the ball number is in the street bet
+        return self.ball in street
+
+    def isWinnerByCorner(self, corner):
+        if self.ball == 0 or self.ball == 37:
+            return False  # 0 and 00 are not part of any corner
+
+        # Check if the ball number is in the corner bet
+        return self.ball in corner
+
+    def isWinnerBySixline(self, sixline):
+        if self.ball == 0 or self.ball == 37:
+            return False  # 0 and 00 are not part of any sixline
+
+        # Check if the ball number is in the sixline bet
+        return self.ball in sixline
+
     # calculate the amount of money the user has won
     def calculateWinnings(self, bet, payout_ratio):
         return bet * payout_ratio
+    
+    def isWinnerByColumn(self, column):
+        if self.ball == 0 or self.ball == 37:
+            return False  # 0 and 00 are not part of any column
+
+        if column == 1:
+            return self.ball in [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]
+        elif column == 2:
+            return self.ball in [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35]
+        elif column == 3:
+            return self.ball in [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36]
+        
+    # 1️⃣2️⃣
+    def isWinnerByDozen(self, dozen):
+        if self.ball == 0 or self.ball == 37:
+            return False  # 0 and 00 are not part of any dozen
+
+        if dozen == 1:
+            return 1 <= self.ball <= 12
+        elif dozen == 2:
+            return 13 <= self.ball <= 24
+        elif dozen == 3:
+            return 25 <= self.ball <= 36
+
+
