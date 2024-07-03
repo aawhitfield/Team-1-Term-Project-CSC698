@@ -98,4 +98,17 @@ class Roulette:
             return self.ball in [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35]
         elif column == 3:
             return self.ball in [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36]
+        
+    # 1️⃣2️⃣
+    def isWinnerByDozen(self, dozen):
+        if self.ball == 0 or self.ball == 37:
+            return False  # 0 and 00 are not part of any dozen
+
+        if dozen == 1:
+            return 1 <= self.ball <= 12
+        elif dozen == 2:
+            return 13 <= self.ball <= 24
+        elif dozen == 3:
+            return 25 <= self.ball <= 36
+
 

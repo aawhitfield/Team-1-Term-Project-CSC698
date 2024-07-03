@@ -41,11 +41,13 @@ class Outside:
         self.display_message('2. Bet on odd or even', (100, 300))
         self.display_message('3. Bet on high/low', (100, 400))
         self.display_message('4. Bet on column', (100, 500))
-        self.display_message('5. Return to main menu', (100, 600))
+        self.display_message('5. Bet on dozen', (100, 600))  # New dozen bet option
+        self.display_message('6. Return to main menu', (100, 700))  # Adjusted return option
         roulette_board = pygame.image.load("roulette_gameboard.png")
         roulette_board = pygame.transform.scale(roulette_board, (250, 500))
         self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
         pygame.display.flip()  # Update the full display Surface to the screen
+
 
 
 
@@ -247,3 +249,43 @@ class Outside:
             self.game_screen.sound.stop_losing_sound()
         pygame.display.flip()
         pygame.time.wait(2000)
+
+    # ****************** Dozen Bets ******************
+    # ******************    1️⃣2️⃣   *******************
+    def get_dozen_bet(self):
+        """Get the user's dozen bet, ensuring valid input."""
+        while True:
+            dozen = self.get_user_input("Enter your dozen bet (1, 2, 3):").strip()
+            if dozen in ["1", "2", "3"]:
+                return int(dozen)
+            else:
+                self.display_message("Invalid input. Please enter 1, 2, or 3.", (100, 650))
+
+    def handle_bet_on_dozen(self):
+        """Handle the bet on a dozen."""
+        bet = self.get_bet_amount()
+        dozen = self.get_dozen_bet()
+
+        self.spin_wheel_animation()
+        ball, color = self.roulette.spin()  # Spin the wheel
+        self.screen.fill(self.background_color)
+        self.display_message(f"The ball landed in pocket {ball} ({color.name.lower()})", (100, 700), self.result_color)
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
+        if self.roulette.isWinnerByDozen(dozen):  # Check if the user won
+            payout_ratio = 2
+            winnings = self.roulette.calculateWinnings(bet, payout_ratio)
+            self.game_screen.balance += winnings
+            self.display_winning_gif()
+            self.display_message(f"You won ${winnings}!", (100, 750))
+        else:
+            self.game_screen.balance -= bet
+            self.display_message(f"You lost ${bet}.", (100, 750))
+            self.game_screen.sound.play_losing_sound()
+            pygame.time.wait(1500)
+            self.game_screen.sound.stop_losing_sound()
+        pygame.display.flip()
+        pygame.time.wait(2000)
+
+

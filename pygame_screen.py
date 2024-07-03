@@ -114,7 +114,7 @@ class PyGameScreen:
         Returns:
             str: The user input.
         """
-        input_box = pygame.Rect(300, 650, 140, 48)  # Create a rectangle for the input box
+        input_box = pygame.Rect(300, 750, 140, 48)  
         color_inactive = pygame.Color('lightskyblue3')  # Inactive color for the input box
         color_active = self.accent_color  # Active color for the input box
         color = color_active  # Start with the active color to automatically focus
@@ -146,7 +146,7 @@ class PyGameScreen:
             self.display_balance()
             if menu_function:
                 menu_function()  # Call the appropriate menu function
-            self.display_message(prompt, (100, 700))  # Adjust the y-coordinate to avoid overlapping
+            self.display_message(prompt, (100, 800))  
             txt_surface = self.font.render(text, True, color)  # Render the text entered by the user
             width = max(200, txt_surface.get_width() + 10)  # Set the width of the input box
             input_box.w = width  # Update the input box width
@@ -159,6 +159,7 @@ class PyGameScreen:
             self.clock.tick(30)  # Control the loop's frame rate
 
         return text  # Return the text entered by the user
+
 
     def spin_wheel_animation(self):
         """Display the spinning wheel animation."""
@@ -226,6 +227,8 @@ class PyGameScreen:
         self.sound.stop_game_over_sound()  # Stop the sound after the animation
         pygame.time.wait(0)  # Wait for 0 seconds after animation ends
 
+    
+    # *************************  Main Loop  🎬 *************************
     def main_loop(self):
         """Main game loop to handle game logic and user interactions."""
         self.display_welcome()  # Display the welcome screen
@@ -255,7 +258,10 @@ class PyGameScreen:
                 elif outside_choice == "4":
                     self.outside.handle_bet_on_column()
                 elif outside_choice == "5":
+                    self.outside.handle_bet_on_dozen()  
+                elif outside_choice == "6":
                     continue
+
             elif choice == "2":
                 self.inside.display_inside_bets_menu()
                 inside_choice = self.get_user_input("Enter your choice:", menu_function=self.inside.display_inside_bets_menu)
