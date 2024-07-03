@@ -39,8 +39,8 @@ class Inside:
         self.display_message('1. Bet on a number', (100, 200))
         self.display_message('2. Street Bet', (100, 300))
         self.display_message('3. Corner Bet', (100, 400))
-        self.display_message('3. Sixline Bet', (100, 500))
-        self.display_message('4. Return to main menu', (100, 600))
+        self.display_message('4. Sixline Bet', (100, 500))
+        self.display_message('5. Return to main menu', (100, 600))
         roulette_board = pygame.image.load("roulette_gameboard.png")
         roulette_board = pygame.transform.scale(roulette_board, (250, 500))
         self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
