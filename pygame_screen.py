@@ -6,6 +6,7 @@ from inside import Inside
 from outside import Outside
 from roulette import Roulette
 from sound import Sound
+from instructions import Instructions
 
 
 class PyGameScreen:
@@ -31,6 +32,7 @@ class PyGameScreen:
         self.banner_image = pygame.image.load("roulette.png")
         self.banner_image = pygame.transform.scale(self.banner_image, (self.screen_info.width // 2, 200))
         self.advanced_bets_image = pygame.image.load("roulette_gameboard.png")
+        self.instructions = Instructions(self.screen, self.font, self.background_color, self.text_color)
 
         self.images = {}
         image_folder = "gif_frames"  # Replace with your folder name
@@ -90,6 +92,8 @@ class PyGameScreen:
                 if event.type == pygame.KEYDOWN:  # Handle any key press
                     waiting = False
 
+
+    # *************************  Main Menu  📋 *************************
     def display_menu(self):
         """Display the main menu with options."""
         self.screen.fill(self.background_color)  # Fill the screen with the background color
@@ -97,7 +101,8 @@ class PyGameScreen:
         self.display_message('Main Menu', (100, 100), self.accent_color)
         self.display_message('1. Outside Bets', (100, 200))
         self.display_message('2. Inside Bets', (100, 300))
-        self.display_message('3. Quit', (100, 400))
+        self.display_message('3. Instructions', (100, 400)) 
+        self.display_message('4. Quit', (100, 500)) 
         roulette_board = pygame.image.load("roulette_gameboard.png")
         roulette_board = pygame.transform.scale(roulette_board, (250, 500))
         self.screen.blit(roulette_board, (500, 100))  # Blit the Surface object directly
@@ -227,6 +232,27 @@ class PyGameScreen:
         self.sound.stop_game_over_sound()  # Stop the sound after the animation
         pygame.time.wait(0)  # Wait for 0 seconds after animation ends
 
+
+    # *************************  Instructions  📚 *************************
+    def display_instructions(self):
+        """Display the instructions screen."""
+        self.instructions.display()
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_DOWN:
+                        self.instructions.scroll("down")
+                        self.instructions.display()
+                    elif event.key == pygame.K_UP:
+                        self.instructions.scroll("up")
+                        self.instructions.display()
+                    else:
+                        waiting = False
+
     
     # *************************  Main Loop  🎬 *************************
     def main_loop(self):
@@ -244,7 +270,7 @@ class PyGameScreen:
             self.display_balance()  # Ensure balance is displayed in the main loop
             choice = self.get_user_input("Enter your choice:", menu_function=self.display_menu)  # Get the user's menu choice
 
-            if choice == "3":  # Quit the game
+            if choice == "4":  # Quit the game
                 running = False
             elif choice == "1":
                 self.outside.display_outside_bets_menu()
@@ -275,5 +301,8 @@ class PyGameScreen:
                     self.inside.handle_bet_on_sixline()
                 elif inside_choice == "5":
                     continue
+
+            elif choice == "3":  # Option for instructions 
+                self.display_instructions()
 
         pygame.quit()  # Quit pygame
